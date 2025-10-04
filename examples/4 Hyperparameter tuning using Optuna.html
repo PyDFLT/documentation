@@ -1,0 +1,3108 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="3%20Analyzing%20training%20using%20Weights%20and%20Biases.html">
+      
+      
+        <link rel="next" href="5%20DFL%20methods%20for%20non-specific%20optimization%20models.html">
+      
+      
+      <link rel="icon" href="">
+    
+    
+      
+        <title>4 Hyperparamater tuning using Optuna - PyDFLT  documentation</title>
+      
+    
+    
+      
+        
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+        <link rel="stylesheet" type="text/css" href="../_static/sphinx_immaterial_theme.acf80fe7f4d9ef9e2.min.css?v=9e56d0d2" />
+        <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+        <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=8071119b" />
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#Prepare-basic-config" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="PyDFLT  documentation" class="md-header__button md-logo" aria-label="PyDFLT  documentation" data-md-component="logo">
+      <img src="../_static/logo_small.png" alt="logo">
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PyDFLT  documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              4 Hyperparamater tuning using Optuna
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="green"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="green"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PyDFLT/PyDFLT/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PyDFLT
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="PyDFLT  documentation" class="md-nav__button md-logo" aria-label="PyDFLT  documentation" data-md-component="logo">
+      <img src="../_static/logo_small.png" alt="logo">
+    </a>
+    PyDFLT  documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PyDFLT/PyDFLT/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PyDFLT
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    <span>Examples</span>
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            <span>Examples</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1%20The%20structure%20of%20PyDFLT.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span title="/examples/1 the structure of pydflt.ipynb (reference label)"><span>1 The structure of Py<wbr>DFLT</span></span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2%20Running%20experiments%20using%20registries.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span title="/examples/2 running experiments using registries.ipynb (reference label)"><span>2 Running experiments using registries</span></span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3%20Analyzing%20training%20using%20Weights%20and%20Biases.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span title="/examples/3 analyzing training using weights and biases.ipynb (reference label)"><span>3 Analyzing training using Weights and Biases</span></span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    <span title="/examples/4 hyperparameter tuning using optuna.ipynb (reference label)"><span>4 Hyperparamater tuning using Optuna</span></span>
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="#" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span title="/examples/4 hyperparameter tuning using optuna.ipynb (reference label)"><span>4 Hyperparamater tuning using Optuna</span></span>
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#Prepare-basic-config" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#prepare-basic-config (reference label)"><span>Prepare basic config</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Define-search-spaces" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#define-search-spaces (reference label)"><span>Define search spaces</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Create-pruner" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#create-pruner (reference label)"><span>Create pruner</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Specify-study" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#specify-study (reference label)"><span>Specify study</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Set-up-dashboard" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#set-up-dashboard (reference label)"><span>Set up dashboard</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Define-trial" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#define-trial (reference label)"><span>Define trial</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Run-tuning" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#run-tuning (reference label)"><span>Run tuning</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Retrieve-and-save-results" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#retrieve-and-save-results (reference label)"><span>Retrieve and save results</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5%20DFL%20methods%20for%20non-specific%20optimization%20models.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span title="/examples/5 dfl methods for non-specific optimization models.ipynb (reference label)"><span>5 DFL methods for non-<wbr>specific optimization models</span></span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    <span>API reference</span>
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            <span>API reference</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/src.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span title="/api/src.rst (reference label)"><span>Py<wbr>DFLT</span></span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#Prepare-basic-config" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#prepare-basic-config (reference label)"><span>Prepare basic config</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Define-search-spaces" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#define-search-spaces (reference label)"><span>Define search spaces</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Create-pruner" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#create-pruner (reference label)"><span>Create pruner</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Specify-study" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#specify-study (reference label)"><span>Specify study</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Set-up-dashboard" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#set-up-dashboard (reference label)"><span>Set up dashboard</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Define-trial" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#define-trial (reference label)"><span>Define trial</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Run-tuning" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#run-tuning (reference label)"><span>Run tuning</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Retrieve-and-save-results" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/4 hyperparameter tuning using optuna.ipynb#retrieve-and-save-results (reference label)"><span>Retrieve and save results</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset" role="main">
+                
+                
+                  
+
+
+<h1 id="4-Hyperparamater-tuning-using-Optuna">4 Hyperparamater tuning using Optuna<a class="headerlink" href="#4-Hyperparamater-tuning-using-Optuna" title="Link to this heading">¶</a></h1>
+<p>Optuna is a hyperparameter tuning package that is integrated in PyDFLT. In this notebook we describe how to use it.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[1]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+
+<span class="n">path_to_project</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;decision-focused-learning-codebase&quot;</span><span class="p">))))</span>
+</code></pre></div>
+</div>
+</div>
+<h2 id="Prepare-basic-config">Prepare basic config<a class="headerlink" href="#Prepare-basic-config" title="Link to this heading">¶</a></h2>
+<p>We first define a base config with the basic parameter configuration. Specifically include parameters here that you want to remain fixed.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[2]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">yaml_dir</span> <span class="o">=</span> <span class="s2">&quot;configs/knapsack.yml&quot;</span>
+<span class="n">base_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">yaml_dir</span><span class="p">))</span>  <span class="c1"># base_config is a dictionary, so does not have to be loaded from a .yml</span>
+
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">base_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+model: {&#39;name&#39;: &#39;knapsack_continuous&#39;, &#39;seed&#39;: 5}
+data: {&#39;name&#39;: &#39;knapsack&#39;, &#39;num_data&#39;: 500, &#39;seed&#39;: 5}
+runner: {&#39;num_epochs&#39;: 5, &#39;use_wandb&#39;: False, &#39;experiment_name&#39;: &#39;tuning&#39;, &#39;experiments_folder&#39;: &#39;results/&#39;, &#39;seed&#39;: 5}
+problem: {&#39;train_ratio&#39;: 0.75, &#39;val_ratio&#39;: 0.15, &#39;seed&#39;: 5}
+decision_maker: {&#39;name&#39;: &#39;differentiable&#39;, &#39;learning_rate&#39;: 0.05, &#39;batch_size&#39;: 32, &#39;seed&#39;: 5}
+</pre></div></div>
+</div>
+<h2 id="Define-search-spaces">Define search spaces<a class="headerlink" href="#Define-search-spaces" title="Link to this heading">¶</a></h2>
+<p>Now we define the parameters we want to search over. In this example we will search the best <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code> and <code class="docutils literal notranslate"><span class="pre">batch_size</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[3]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">src.utils.optuna</span><span class="w"> </span><span class="kn">import</span> <span class="n">SearchSpaceConfig</span>
+
+<span class="c1"># To conduct a hyperparameter tuning experiment, we first need to define the search spaces</span>
+<span class="n">search_space</span> <span class="o">=</span> <span class="n">SearchSpaceConfig</span><span class="p">(</span><span class="n">path_to_project</span> <span class="o">+</span> <span class="s2">&quot;examples/hparams_search_spaces/test_search_config.yaml&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">search_space</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>  <span class="c1"># search_space.config is a nested dictionary</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Auto-Sklearn cannot be imported.
+decision_maker: {&#39;learning_rate&#39;: {&#39;type&#39;: &#39;float&#39;, &#39;low&#39;: 1e-05, &#39;high&#39;: 0.001, &#39;log&#39;: True}, &#39;batch_size&#39;: {&#39;type&#39;: &#39;int&#39;, &#39;low&#39;: 1, &#39;high&#39;: 512, &#39;log&#39;: True}}
+</pre></div></div>
+</div>
+<h2 id="Create-pruner">Create pruner<a class="headerlink" href="#Create-pruner" title="Link to this heading">¶</a></h2>
+<p>A pruner can be used to prune trials that are not promising. This can greatly reduce the time to find good parameters.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[4]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">optuna</span>
+
+<span class="n">pruner</span> <span class="o">=</span> <span class="n">optuna</span><span class="o">.</span><span class="n">pruners</span><span class="o">.</span><span class="n">MedianPruner</span><span class="p">(</span>
+    <span class="n">n_startup_trials</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>  <span class="c1"># Number of trials to run before pruning</span>
+    <span class="n">n_warmup_steps</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>  <span class="c1"># Number of epochs to wait before pruning</span>
+    <span class="n">interval_steps</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Interval between pruning checks</span>
+    <span class="n">n_min_trials</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Minimum trials required for pruning</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<h2 id="Specify-study">Specify study<a class="headerlink" href="#Specify-study" title="Link to this heading">¶</a></h2>
+<p>Specify study name and the folder where the results are stored. A database.db file will be created in the folder <code class="docutils literal notranslate"><span class="pre">OUTPUT_DIR</span></code>. While different problems/methods can be all inside the same database, it can be convenient to separate it by problem or method.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[5]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">src.utils.optuna</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_study</span>
+
+<span class="n">STUDY_NAME</span> <span class="o">=</span> <span class="s2">&quot;test_study&quot;</span>  <span class="c1"># Note that optuna will continue with an existing study if the study already exists</span>
+<span class="n">OUTPUT_DIR</span> <span class="o">=</span> <span class="s2">&quot;hparam_optimization_results/&quot;</span>  <span class="c1"># Folder where the study database is stored (at OUTPUT_DIR/STUDY_NAME)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">OUTPUT_DIR</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">STUDY_NAME</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Ensure that the folder exists</span>
+<span class="n">study</span> <span class="o">=</span> <span class="n">create_study</span><span class="p">(</span>
+    <span class="n">STUDY_NAME</span><span class="p">,</span>
+    <span class="n">storage_url</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;sqlite:///</span><span class="si">{</span><span class="n">OUTPUT_DIR</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">STUDY_NAME</span><span class="si">}</span><span class="s2">/database.db&quot;</span><span class="p">,</span>
+    <span class="n">prunner</span><span class="o">=</span><span class="n">pruner</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Storage url: sqlite:///hparam_optimization_results//test_study/database.db
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[I 2025-10-02 14:46:13,277] Using an existing study with name &#39;test_study&#39; instead of creating a new one.
+</pre></div></div>
+</div>
+<h2 id="Set-up-dashboard">Set up dashboard<a class="headerlink" href="#Set-up-dashboard" title="Link to this heading">¶</a></h2>
+<p>We can set up a dashboard that visualizes results when the study is running, opened in the background (using package <code class="docutils literal notranslate"><span class="pre">optuna-dashboard</span></code>). Alternatively open the dashboard through the terminal using: <code class="docutils literal notranslate"><span class="pre">optuna-dashboard</span> <span class="pre">sqlite:///examples/hparam_optimization_results//test_study//database.db</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[6]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">find_free_port</span><span class="p">():</span>
+    <span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">()</span> <span class="k">as</span> <span class="n">sock</span><span class="p">:</span>
+        <span class="n">sock</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">sock</span><span class="o">.</span><span class="n">getsockname</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+
+
+<span class="n">port</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">find_free_port</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found free port: </span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;optuna-dashboard&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sqlite:///hparam_optimization_results//test_study//database.db&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;--port&quot;</span><span class="p">,</span>
+        <span class="n">port</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;See dashboard here: http://localhost:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Found free port: 49962
+See dashboard here: http://localhost:49962
+</pre></div></div>
+</div>
+<h2 id="Define-trial">Define trial<a class="headerlink" href="#Define-trial" title="Link to this heading">¶</a></h2>
+<p>To run hyperparameters tuning with Optuna, we need to define what a ‘trial’ looks like. We run each configuration for multiple seeds using <code class="docutils literal notranslate"><span class="pre">run_trial</span></code>. Finally, we define <code class="docutils literal notranslate"><span class="pre">objective_function</span></code>, denoting what we use as evaluation metric. In this case this is the validation objective as returned by running the experiment through <code class="docutils literal notranslate"><span class="pre">run_trial</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[7]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">src.utils.optuna</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_trial</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">run_trial</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">objective_fn</span><span class="p">(</span><span class="n">trial</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">run_trial</span><span class="p">(</span><span class="n">trial</span><span class="p">,</span> <span class="n">search_space</span><span class="p">,</span> <span class="n">base_config</span><span class="p">,</span> <span class="n">seeds</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
+</code></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+def run_trial(trial, search_space: SearchSpaceConfig, base_config, seeds: list):
+    assert len(seeds) &gt; 0, &#34;Provide at least one seed!&#34;
+
+    # Parse Optuna Trial to get a config of the values
+    trial_config = search_space.get_trial_config(trial)
+
+    # For more robust evaluation, we run each hyperparameter configuration for multiple seeds (same across different configurations)
+    # Make sure to use different seeds for the experiments after
+    per_seeds_results = []
+    for seed in seeds:
+        # Update config based on trial
+        config = update_config(base_config=base_config, updates_config=trial_config)
+
+        # Initialize all objects with the seed
+        config[&#34;seed&#34;] = seed
+        for key in config:
+            if isinstance(config[key], dict) and &#34;seed&#34; in config[key]:
+                config[key][&#34;seed&#34;] = seed
+
+        results = run(config, optuna_trial=trial)
+        per_seeds_results.append(results)
+
+    try:
+        return np.mean(per_seeds_results)
+    except optuna.TrialPruned:
+        raise
+
+</pre></div></div>
+</div>
+<h2 id="Run-tuning">Run tuning<a class="headerlink" href="#Run-tuning" title="Link to this heading">¶</a></h2>
+<p>Now we run the hyperparameter tuning</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[8]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">study</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">objective_fn</span><span class="p">,</span> <span class="n">n_trials</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">catch</span><span class="o">=</span><span class="p">(</span><span class="ne">Exception</span><span class="p">,),</span> <span class="n">show_progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "14e2e0d7335b4f02850ebd05a93a42e4", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Generating data using knapsack
+Computing optimal decisions for the entire dataset...
+Optimal decisions computed and added to dataset.
+Computing optimal objectives for the entire dataset...
+Optimal objectives computed and added to dataset.
+Shuffling indices before splitting...
+Dataset split completed: Train=375, Validation=75, Test=50
+Problem mode set to: train
+Problem mode set to: train
+Epoch 0/5: Starting initial validation...
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3376
+validation/abs_regret_mean: 8.9304
+validation/rel_regret_mean: 0.4107
+validation/select_item_mean: 0.3410
+validation/objective_mean: 15.7564
+validation/sym_rel_regret_mean: 0.2772
+validation/mse_mean: 41.6570
+Initial best validation metric (abs_regret): 8.930413246154785
+Starting training...
+Epoch: 1/5
+Problem mode set to: train
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+Listening on http://127.0.0.1:49962/
+Hit Ctrl-C to quit.
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Epoch Results:
+validation/item_value_mean: 4.3376
+validation/abs_regret_mean: 8.9304
+train/objective_mean: 17.6441
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4107
+train/rel_regret_mean: 0.3719
+train/solver_calls_mean: 308.0000
+train/abs_regret_mean: 8.1569
+validation/select_item_mean: 0.3410
+train/sym_rel_regret_mean: 0.2471
+train/loss_mean: 8.1569
+validation/objective_mean: 15.7564
+validation/sym_rel_regret_mean: 0.2772
+validation/mse_mean: 41.6570
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3303
+validation/abs_regret_mean: 9.0297
+train/objective_mean: 17.6441
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4118
+train/rel_regret_mean: 0.3719
+train/solver_calls_mean: 308.0000
+train/abs_regret_mean: 8.1569
+validation/select_item_mean: 0.3410
+train/sym_rel_regret_mean: 0.2471
+train/loss_mean: 8.1569
+validation/objective_mean: 15.6571
+validation/sym_rel_regret_mean: 0.2781
+validation/mse_mean: 41.6694
+Validation evaluation (abs_regret): 9.129018783569336
+Epoch: 2/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3303
+validation/abs_regret_mean: 9.0297
+train/objective_mean: 17.5524
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4118
+train/rel_regret_mean: 0.3725
+train/solver_calls_mean: 533.0000
+train/abs_regret_mean: 8.1554
+validation/select_item_mean: 0.3410
+train/sym_rel_regret_mean: 0.2476
+train/loss_mean: 8.1554
+validation/objective_mean: 15.6571
+validation/sym_rel_regret_mean: 0.2781
+validation/mse_mean: 41.6694
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3252
+validation/abs_regret_mean: 9.0312
+train/objective_mean: 17.5524
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4103
+train/rel_regret_mean: 0.3725
+train/solver_calls_mean: 533.0000
+train/abs_regret_mean: 8.1554
+validation/select_item_mean: 0.3411
+train/sym_rel_regret_mean: 0.2476
+train/loss_mean: 8.1554
+validation/objective_mean: 15.6557
+validation/sym_rel_regret_mean: 0.2766
+validation/mse_mean: 41.6529
+Validation evaluation (abs_regret): 9.034099578857422
+Epoch: 3/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3252
+validation/abs_regret_mean: 9.0312
+train/objective_mean: 17.5588
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4103
+train/rel_regret_mean: 0.3730
+train/solver_calls_mean: 758.0000
+train/abs_regret_mean: 8.2397
+validation/select_item_mean: 0.3411
+train/sym_rel_regret_mean: 0.2478
+train/loss_mean: 8.2397
+validation/objective_mean: 15.6557
+validation/sym_rel_regret_mean: 0.2766
+validation/mse_mean: 41.6529
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3238
+validation/abs_regret_mean: 9.0560
+train/objective_mean: 17.5588
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4096
+train/rel_regret_mean: 0.3730
+train/solver_calls_mean: 758.0000
+train/abs_regret_mean: 8.2397
+validation/select_item_mean: 0.3412
+train/sym_rel_regret_mean: 0.2478
+train/loss_mean: 8.2397
+validation/objective_mean: 15.6308
+validation/sym_rel_regret_mean: 0.2760
+validation/mse_mean: 41.6375
+Validation evaluation (abs_regret): 9.130633354187012
+Epoch: 4/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3238
+validation/abs_regret_mean: 9.0560
+train/objective_mean: 17.5126
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4096
+train/rel_regret_mean: 0.3730
+train/solver_calls_mean: 983.0000
+train/abs_regret_mean: 8.2600
+validation/select_item_mean: 0.3412
+train/sym_rel_regret_mean: 0.2476
+train/loss_mean: 8.2600
+validation/objective_mean: 15.6308
+validation/sym_rel_regret_mean: 0.2760
+validation/mse_mean: 41.6375
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3242
+validation/abs_regret_mean: 9.0702
+train/objective_mean: 17.5126
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4092
+train/rel_regret_mean: 0.3730
+train/solver_calls_mean: 983.0000
+train/abs_regret_mean: 8.2600
+validation/select_item_mean: 0.3413
+train/sym_rel_regret_mean: 0.2476
+train/loss_mean: 8.2600
+validation/objective_mean: 15.6166
+validation/sym_rel_regret_mean: 0.2756
+validation/mse_mean: 41.6248
+Validation evaluation (abs_regret): 9.126912117004395
+Epoch: 5/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3242
+validation/abs_regret_mean: 9.0702
+train/objective_mean: 17.4779
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4092
+train/rel_regret_mean: 0.3730
+train/solver_calls_mean: 1208.0000
+train/abs_regret_mean: 8.2706
+validation/select_item_mean: 0.3413
+train/sym_rel_regret_mean: 0.2475
+train/loss_mean: 8.2706
+validation/objective_mean: 15.6166
+validation/sym_rel_regret_mean: 0.2756
+validation/mse_mean: 41.6248
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3244
+validation/abs_regret_mean: 9.0829
+train/objective_mean: 17.4779
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4087
+train/rel_regret_mean: 0.3730
+train/solver_calls_mean: 1208.0000
+train/abs_regret_mean: 8.2706
+validation/select_item_mean: 0.3414
+train/sym_rel_regret_mean: 0.2475
+train/loss_mean: 8.2706
+validation/objective_mean: 15.6039
+validation/sym_rel_regret_mean: 0.2751
+validation/mse_mean: 41.6121
+Validation evaluation (abs_regret): 9.146434783935547
+Training finished. Evaluating on the test set...
+Problem mode set to: test
+Epoch Results:
+test/sym_rel_regret_mean: 0.2862
+validation/abs_regret_mean: 9.0829
+test/select_item_mean: 0.3407
+test/objective_mean: 14.6595
+test/mse_mean: 27.6233
+validation/mse_mean: 41.6121
+train/objective_mean: 17.4779
+train/rel_regret_mean: 0.3730
+train/loss_mean: 8.2706
+validation/objective_mean: 15.6039
+validation/sym_rel_regret_mean: 0.2751
+test/item_value_mean: 4.3211
+validation/rel_regret_mean: 0.4087
+test/rel_regret_mean: 0.4275
+train/abs_regret_mean: 8.2706
+validation/item_value_mean: 4.3244
+train/grad_norm_mean: 0.0000
+train/solver_calls_mean: 1208.0000
+train/sym_rel_regret_mean: 0.2475
+validation/select_item_mean: 0.3414
+test/abs_regret_mean: 9.4049
+Generating data using knapsack
+Computing optimal decisions for the entire dataset...
+Optimal decisions computed and added to dataset.
+Computing optimal objectives for the entire dataset...
+Optimal objectives computed and added to dataset.
+Shuffling indices before splitting...
+Dataset split completed: Train=375, Validation=75, Test=50
+Problem mode set to: train
+Problem mode set to: train
+Epoch 0/5: Starting initial validation...
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3190
+validation/abs_regret_mean: 7.4671
+validation/rel_regret_mean: 0.2468
+validation/select_item_mean: 0.4999
+validation/objective_mean: 21.8615
+validation/sym_rel_regret_mean: 0.1521
+validation/mse_mean: 36.8984
+Initial best validation metric (abs_regret): 7.467118263244629
+Starting training...
+Epoch: 1/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3190
+validation/abs_regret_mean: 7.4671
+train/objective_mean: 22.2881
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2468
+train/rel_regret_mean: 0.2640
+train/solver_calls_mean: 308.0000
+train/abs_regret_mean: 8.8443
+validation/select_item_mean: 0.4999
+train/sym_rel_regret_mean: 0.1621
+train/loss_mean: 8.8443
+validation/objective_mean: 21.8615
+validation/sym_rel_regret_mean: 0.1521
+validation/mse_mean: 36.8984
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3204
+validation/abs_regret_mean: 7.4201
+train/objective_mean: 22.2881
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2449
+train/rel_regret_mean: 0.2640
+train/solver_calls_mean: 308.0000
+train/abs_regret_mean: 8.8443
+validation/select_item_mean: 0.5000
+train/sym_rel_regret_mean: 0.1621
+train/loss_mean: 8.8443
+validation/objective_mean: 21.9085
+validation/sym_rel_regret_mean: 0.1507
+validation/mse_mean: 36.8715
+Validation evaluation (abs_regret): 7.37300443649292
+New best validation evaluation (abs_regret): 7.37300443649292 (was 7.467118263244629)
+Epoch: 2/5
+Problem mode set to: train
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/noah/PycharmProjects/PyDFLT/.venv/lib/python3.12/site-packages/optuna/trial/_trial.py:501: UserWarning: The reported value is ignored because this `step` 1 is already reported.
+  warnings.warn(
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Epoch Results:
+validation/item_value_mean: 4.3204
+validation/abs_regret_mean: 7.4201
+train/objective_mean: 22.4648
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2449
+train/rel_regret_mean: 0.2638
+train/solver_calls_mean: 533.0000
+train/abs_regret_mean: 8.9204
+validation/select_item_mean: 0.5000
+train/sym_rel_regret_mean: 0.1618
+train/loss_mean: 8.9204
+validation/objective_mean: 21.9085
+validation/sym_rel_regret_mean: 0.1507
+validation/mse_mean: 36.8715
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3203
+validation/abs_regret_mean: 7.3896
+train/objective_mean: 22.4648
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2443
+train/rel_regret_mean: 0.2638
+train/solver_calls_mean: 533.0000
+train/abs_regret_mean: 8.9204
+validation/select_item_mean: 0.5001
+train/sym_rel_regret_mean: 0.1618
+train/loss_mean: 8.9204
+validation/objective_mean: 21.9390
+validation/sym_rel_regret_mean: 0.1502
+validation/mse_mean: 36.8570
+Validation evaluation (abs_regret): 7.328555583953857
+New best validation evaluation (abs_regret): 7.328555583953857 (was 7.37300443649292)
+Epoch: 3/5
+Problem mode set to: train
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/noah/PycharmProjects/PyDFLT/.venv/lib/python3.12/site-packages/optuna/trial/_trial.py:501: UserWarning: The reported value is ignored because this `step` 2 is already reported.
+  warnings.warn(
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Epoch Results:
+validation/item_value_mean: 4.3203
+validation/abs_regret_mean: 7.3896
+train/objective_mean: 22.4460
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2443
+train/rel_regret_mean: 0.2643
+train/solver_calls_mean: 758.0000
+train/abs_regret_mean: 8.8979
+validation/select_item_mean: 0.5001
+train/sym_rel_regret_mean: 0.1623
+train/loss_mean: 8.8979
+validation/objective_mean: 21.9390
+validation/sym_rel_regret_mean: 0.1502
+validation/mse_mean: 36.8570
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3196
+validation/abs_regret_mean: 7.3488
+train/objective_mean: 22.4460
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2437
+train/rel_regret_mean: 0.2643
+train/solver_calls_mean: 758.0000
+train/abs_regret_mean: 8.8979
+validation/select_item_mean: 0.4999
+train/sym_rel_regret_mean: 0.1623
+train/loss_mean: 8.8979
+validation/objective_mean: 21.9798
+validation/sym_rel_regret_mean: 0.1498
+validation/mse_mean: 36.8448
+Validation evaluation (abs_regret): 7.226625919342041
+New best validation evaluation (abs_regret): 7.226625919342041 (was 7.328555583953857)
+Epoch: 4/5
+Problem mode set to: train
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/noah/PycharmProjects/PyDFLT/.venv/lib/python3.12/site-packages/optuna/trial/_trial.py:501: UserWarning: The reported value is ignored because this `step` 3 is already reported.
+  warnings.warn(
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Epoch Results:
+validation/item_value_mean: 4.3196
+validation/abs_regret_mean: 7.3488
+train/objective_mean: 22.5024
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2437
+train/rel_regret_mean: 0.2641
+train/solver_calls_mean: 983.0000
+train/abs_regret_mean: 8.8665
+validation/select_item_mean: 0.4999
+train/sym_rel_regret_mean: 0.1622
+train/loss_mean: 8.8665
+validation/objective_mean: 21.9798
+validation/sym_rel_regret_mean: 0.1498
+validation/mse_mean: 36.8448
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3186
+validation/abs_regret_mean: 7.3340
+train/objective_mean: 22.5024
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2437
+train/rel_regret_mean: 0.2641
+train/solver_calls_mean: 983.0000
+train/abs_regret_mean: 8.8665
+validation/select_item_mean: 0.4997
+train/sym_rel_regret_mean: 0.1622
+train/loss_mean: 8.8665
+validation/objective_mean: 21.9946
+validation/sym_rel_regret_mean: 0.1498
+validation/mse_mean: 36.8352
+Validation evaluation (abs_regret): 7.274838924407959
+Epoch: 5/5
+Problem mode set to: train
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/noah/PycharmProjects/PyDFLT/.venv/lib/python3.12/site-packages/optuna/trial/_trial.py:501: UserWarning: The reported value is ignored because this `step` 4 is already reported.
+  warnings.warn(
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Epoch Results:
+validation/item_value_mean: 4.3186
+validation/abs_regret_mean: 7.3340
+train/objective_mean: 22.4354
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2437
+train/rel_regret_mean: 0.2646
+train/solver_calls_mean: 1208.0000
+train/abs_regret_mean: 8.8713
+validation/select_item_mean: 0.4997
+train/sym_rel_regret_mean: 0.1627
+train/loss_mean: 8.8713
+validation/objective_mean: 21.9946
+validation/sym_rel_regret_mean: 0.1498
+validation/mse_mean: 36.8352
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3175
+validation/abs_regret_mean: 7.2544
+train/objective_mean: 22.4354
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2436
+train/rel_regret_mean: 0.2646
+train/solver_calls_mean: 1208.0000
+train/abs_regret_mean: 8.8713
+validation/select_item_mean: 0.4995
+train/sym_rel_regret_mean: 0.1627
+train/loss_mean: 8.8713
+validation/objective_mean: 22.0742
+validation/sym_rel_regret_mean: 0.1497
+validation/mse_mean: 36.8291
+Validation evaluation (abs_regret): 6.856178283691406
+New best validation evaluation (abs_regret): 6.856178283691406 (was 7.226625919342041)
+Training finished. Evaluating on the test set...
+Problem mode set to: test
+Epoch Results:
+test/sym_rel_regret_mean: 0.1544
+validation/abs_regret_mean: 7.2544
+test/select_item_mean: 0.4998
+test/objective_mean: 21.9936
+test/mse_mean: 21.6681
+validation/mse_mean: 36.8291
+train/objective_mean: 22.4354
+train/rel_regret_mean: 0.2646
+train/loss_mean: 8.8713
+validation/objective_mean: 22.0742
+validation/sym_rel_regret_mean: 0.1497
+test/item_value_mean: 4.2916
+validation/rel_regret_mean: 0.2436
+test/rel_regret_mean: 0.2489
+train/abs_regret_mean: 8.8713
+validation/item_value_mean: 4.3175
+train/grad_norm_mean: 0.0000
+train/solver_calls_mean: 1208.0000
+train/sym_rel_regret_mean: 0.1627
+validation/select_item_mean: 0.4995
+test/abs_regret_mean: 7.7975
+Generating data using knapsack
+Computing optimal decisions for the entire dataset...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/noah/PycharmProjects/PyDFLT/.venv/lib/python3.12/site-packages/optuna/trial/_trial.py:501: UserWarning: The reported value is ignored because this `step` 5 is already reported.
+  warnings.warn(
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Optimal decisions computed and added to dataset.
+Computing optimal objectives for the entire dataset...
+Optimal objectives computed and added to dataset.
+Shuffling indices before splitting...
+Dataset split completed: Train=375, Validation=75, Test=50
+Problem mode set to: train
+Problem mode set to: train
+Epoch 0/5: Starting initial validation...
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8620
+validation/abs_regret_mean: 6.3541
+validation/rel_regret_mean: 0.2326
+validation/select_item_mean: 0.4642
+validation/objective_mean: 21.4090
+validation/sym_rel_regret_mean: 0.1394
+validation/mse_mean: 23.9004
+Initial best validation metric (abs_regret): 6.3540873527526855
+Starting training...
+Epoch: 1/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 3.8620
+validation/abs_regret_mean: 6.3541
+train/objective_mean: 20.6727
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2326
+train/rel_regret_mean: 0.2773
+train/solver_calls_mean: 308.0000
+train/abs_regret_mean: 9.4868
+validation/select_item_mean: 0.4642
+train/sym_rel_regret_mean: 0.1730
+train/loss_mean: 9.4868
+validation/objective_mean: 21.4090
+validation/sym_rel_regret_mean: 0.1394
+validation/mse_mean: 23.9004
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8751
+validation/abs_regret_mean: 6.2229
+train/objective_mean: 20.6727
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2301
+train/rel_regret_mean: 0.2773
+train/solver_calls_mean: 308.0000
+train/abs_regret_mean: 9.4868
+validation/select_item_mean: 0.4649
+train/sym_rel_regret_mean: 0.1730
+train/loss_mean: 9.4868
+validation/objective_mean: 21.5402
+validation/sym_rel_regret_mean: 0.1376
+validation/mse_mean: 23.8073
+Validation evaluation (abs_regret): 6.091647624969482
+New best validation evaluation (abs_regret): 6.091647624969482 (was 6.3540873527526855)
+Epoch: 2/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 3.8751
+validation/abs_regret_mean: 6.2229
+train/objective_mean: 20.8569
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2301
+train/rel_regret_mean: 0.2729
+train/solver_calls_mean: 533.0000
+train/abs_regret_mean: 9.1785
+validation/select_item_mean: 0.4649
+train/sym_rel_regret_mean: 0.1697
+train/loss_mean: 9.1785
+validation/objective_mean: 21.5402
+validation/sym_rel_regret_mean: 0.1376
+validation/mse_mean: 23.8073
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8787
+validation/abs_regret_mean: 6.1988
+train/objective_mean: 20.8569
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2295
+train/rel_regret_mean: 0.2729
+train/solver_calls_mean: 533.0000
+train/abs_regret_mean: 9.1785
+validation/select_item_mean: 0.4651
+train/sym_rel_regret_mean: 0.1697
+train/loss_mean: 9.1785
+validation/objective_mean: 21.5643
+validation/sym_rel_regret_mean: 0.1373
+validation/mse_mean: 23.7727
+Validation evaluation (abs_regret): 6.150722026824951
+Epoch: 3/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 3.8787
+validation/abs_regret_mean: 6.1988
+train/objective_mean: 20.9904
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2295
+train/rel_regret_mean: 0.2714
+train/solver_calls_mean: 758.0000
+train/abs_regret_mean: 9.1450
+validation/select_item_mean: 0.4651
+train/sym_rel_regret_mean: 0.1686
+train/loss_mean: 9.1450
+validation/objective_mean: 21.5643
+validation/sym_rel_regret_mean: 0.1373
+validation/mse_mean: 23.7727
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8794
+validation/abs_regret_mean: 6.2176
+train/objective_mean: 20.9904
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2297
+train/rel_regret_mean: 0.2714
+train/solver_calls_mean: 758.0000
+train/abs_regret_mean: 9.1450
+validation/select_item_mean: 0.4650
+train/sym_rel_regret_mean: 0.1686
+train/loss_mean: 9.1450
+validation/objective_mean: 21.5455
+validation/sym_rel_regret_mean: 0.1373
+validation/mse_mean: 23.7632
+Validation evaluation (abs_regret): 6.2741289138793945
+Epoch: 4/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 3.8794
+validation/abs_regret_mean: 6.2176
+train/objective_mean: 20.9970
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2297
+train/rel_regret_mean: 0.2714
+train/solver_calls_mean: 983.0000
+train/abs_regret_mean: 9.1491
+validation/select_item_mean: 0.4650
+train/sym_rel_regret_mean: 0.1686
+train/loss_mean: 9.1491
+validation/objective_mean: 21.5455
+validation/sym_rel_regret_mean: 0.1373
+validation/mse_mean: 23.7632
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8797
+validation/abs_regret_mean: 6.2289
+train/objective_mean: 20.9970
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2297
+train/rel_regret_mean: 0.2714
+train/solver_calls_mean: 983.0000
+train/abs_regret_mean: 9.1491
+validation/select_item_mean: 0.4650
+train/sym_rel_regret_mean: 0.1686
+train/loss_mean: 9.1491
+validation/objective_mean: 21.5342
+validation/sym_rel_regret_mean: 0.1373
+validation/mse_mean: 23.7617
+Validation evaluation (abs_regret): 6.2741289138793945
+Epoch: 5/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 3.8797
+validation/abs_regret_mean: 6.2289
+train/objective_mean: 21.0261
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2297
+train/rel_regret_mean: 0.2717
+train/solver_calls_mean: 1208.0000
+train/abs_regret_mean: 9.1465
+validation/select_item_mean: 0.4650
+train/sym_rel_regret_mean: 0.1688
+train/loss_mean: 9.1465
+validation/objective_mean: 21.5342
+validation/sym_rel_regret_mean: 0.1373
+validation/mse_mean: 23.7617
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8802
+validation/abs_regret_mean: 6.2409
+train/objective_mean: 21.0261
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2300
+train/rel_regret_mean: 0.2717
+train/solver_calls_mean: 1208.0000
+train/abs_regret_mean: 9.1465
+validation/select_item_mean: 0.4649
+train/sym_rel_regret_mean: 0.1688
+train/loss_mean: 9.1465
+validation/objective_mean: 21.5222
+validation/sym_rel_regret_mean: 0.1376
+validation/mse_mean: 23.7544
+Validation evaluation (abs_regret): 6.300710201263428
+Training finished. Evaluating on the test set...
+Problem mode set to: test
+Epoch Results:
+test/sym_rel_regret_mean: 0.1533
+validation/abs_regret_mean: 6.2409
+test/select_item_mean: 0.4653
+test/objective_mean: 20.8881
+test/mse_mean: 44.5702
+validation/mse_mean: 23.7544
+train/objective_mean: 21.0261
+train/rel_regret_mean: 0.2717
+train/loss_mean: 9.1465
+validation/objective_mean: 21.5222
+validation/sym_rel_regret_mean: 0.1376
+test/item_value_mean: 3.9034
+validation/rel_regret_mean: 0.2300
+test/rel_regret_mean: 0.2520
+train/abs_regret_mean: 9.1465
+validation/item_value_mean: 3.8802
+train/grad_norm_mean: 0.0000
+train/solver_calls_mean: 1208.0000
+train/sym_rel_regret_mean: 0.1688
+validation/select_item_mean: 0.4649
+test/abs_regret_mean: 8.4390
+[I 2025-10-02 14:46:24,980] Trial 33 finished with value: 7.292746067047119 and parameters: {&#39;learning_rate&#39;: 8.839302533722684e-05, &#39;batch_size&#39;: 79}. Best is trial 6 with value: 3.5843217372894287.
+Generating data using knapsack
+Computing optimal decisions for the entire dataset...
+Optimal decisions computed and added to dataset.
+Computing optimal objectives for the entire dataset...
+Optimal objectives computed and added to dataset.
+Shuffling indices before splitting...
+Dataset split completed: Train=375, Validation=75, Test=50
+Problem mode set to: train
+Problem mode set to: train
+Epoch 0/5: Starting initial validation...
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3376
+validation/abs_regret_mean: 8.9304
+validation/rel_regret_mean: 0.4107
+validation/select_item_mean: 0.3410
+validation/objective_mean: 15.7564
+validation/sym_rel_regret_mean: 0.2772
+validation/mse_mean: 41.6570
+Initial best validation metric (abs_regret): 8.930413246154785
+Starting training...
+Epoch: 1/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3376
+validation/abs_regret_mean: 8.9304
+train/objective_mean: 17.0670
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4107
+train/rel_regret_mean: 0.3736
+train/solver_calls_mean: 399.0000
+train/abs_regret_mean: 8.1865
+validation/select_item_mean: 0.3410
+train/sym_rel_regret_mean: 0.2486
+train/loss_mean: 8.1865
+validation/objective_mean: 15.7564
+validation/sym_rel_regret_mean: 0.2772
+validation/mse_mean: 41.6570
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3106
+validation/abs_regret_mean: 8.7969
+train/objective_mean: 17.0670
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.3982
+train/rel_regret_mean: 0.3736
+train/solver_calls_mean: 399.0000
+train/abs_regret_mean: 8.1865
+validation/select_item_mean: 0.3421
+train/sym_rel_regret_mean: 0.2486
+train/loss_mean: 8.1865
+validation/objective_mean: 15.8899
+validation/sym_rel_regret_mean: 0.2664
+validation/mse_mean: 41.6620
+Validation evaluation (abs_regret): 8.663439750671387
+New best validation evaluation (abs_regret): 8.663439750671387 (was 8.930413246154785)
+Epoch: 2/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3106
+validation/abs_regret_mean: 8.7969
+train/objective_mean: 16.9975
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.3982
+train/rel_regret_mean: 0.3713
+train/solver_calls_mean: 624.0000
+train/abs_regret_mean: 8.0889
+validation/select_item_mean: 0.3421
+train/sym_rel_regret_mean: 0.2468
+train/loss_mean: 8.0889
+validation/objective_mean: 15.8899
+validation/sym_rel_regret_mean: 0.2664
+validation/mse_mean: 41.6620
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.2955
+validation/abs_regret_mean: 8.8520
+train/objective_mean: 16.9975
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.3959
+train/rel_regret_mean: 0.3713
+train/solver_calls_mean: 624.0000
+train/abs_regret_mean: 8.0889
+validation/select_item_mean: 0.3426
+train/sym_rel_regret_mean: 0.2468
+train/loss_mean: 8.0889
+validation/objective_mean: 15.8348
+validation/sym_rel_regret_mean: 0.2644
+validation/mse_mean: 41.6838
+Validation evaluation (abs_regret): 8.962175369262695
+Epoch: 3/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.2955
+validation/abs_regret_mean: 8.8520
+train/objective_mean: 17.4659
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.3959
+train/rel_regret_mean: 0.3676
+train/solver_calls_mean: 849.0000
+train/abs_regret_mean: 8.3069
+validation/select_item_mean: 0.3426
+train/sym_rel_regret_mean: 0.2434
+train/loss_mean: 8.3069
+validation/objective_mean: 15.8348
+validation/sym_rel_regret_mean: 0.2644
+validation/mse_mean: 41.6838
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.2875
+validation/abs_regret_mean: 8.8257
+train/objective_mean: 17.4659
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.3932
+train/rel_regret_mean: 0.3676
+train/solver_calls_mean: 849.0000
+train/abs_regret_mean: 8.3069
+validation/select_item_mean: 0.3429
+train/sym_rel_regret_mean: 0.2434
+train/loss_mean: 8.3069
+validation/objective_mean: 15.8611
+validation/sym_rel_regret_mean: 0.2624
+validation/mse_mean: 41.7173
+Validation evaluation (abs_regret): 8.746880531311035
+Epoch: 4/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.2875
+validation/abs_regret_mean: 8.8257
+train/objective_mean: 17.5290
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.3932
+train/rel_regret_mean: 0.3650
+train/solver_calls_mean: 1074.0000
+train/abs_regret_mean: 8.3490
+validation/select_item_mean: 0.3429
+train/sym_rel_regret_mean: 0.2409
+train/loss_mean: 8.3490
+validation/objective_mean: 15.8611
+validation/sym_rel_regret_mean: 0.2624
+validation/mse_mean: 41.7173
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.2819
+validation/abs_regret_mean: 8.7880
+train/objective_mean: 17.5290
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.3901
+train/rel_regret_mean: 0.3650
+train/solver_calls_mean: 1074.0000
+train/abs_regret_mean: 8.3490
+validation/select_item_mean: 0.3433
+train/sym_rel_regret_mean: 0.2409
+train/loss_mean: 8.3490
+validation/objective_mean: 15.8988
+validation/sym_rel_regret_mean: 0.2602
+validation/mse_mean: 41.7474
+Validation evaluation (abs_regret): 8.637103080749512
+New best validation evaluation (abs_regret): 8.637103080749512 (was 8.663439750671387)
+Epoch: 5/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.2819
+validation/abs_regret_mean: 8.7880
+train/objective_mean: 17.3939
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.3901
+train/rel_regret_mean: 0.3640
+train/solver_calls_mean: 1299.0000
+train/abs_regret_mean: 8.3570
+validation/select_item_mean: 0.3433
+train/sym_rel_regret_mean: 0.2399
+train/loss_mean: 8.3570
+validation/objective_mean: 15.8988
+validation/sym_rel_regret_mean: 0.2602
+validation/mse_mean: 41.7474
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.2792
+validation/abs_regret_mean: 8.7801
+train/objective_mean: 17.3939
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.3887
+train/rel_regret_mean: 0.3640
+train/solver_calls_mean: 1299.0000
+train/abs_regret_mean: 8.3570
+validation/select_item_mean: 0.3435
+train/sym_rel_regret_mean: 0.2399
+train/loss_mean: 8.3570
+validation/objective_mean: 15.9067
+validation/sym_rel_regret_mean: 0.2593
+validation/mse_mean: 41.7814
+Validation evaluation (abs_regret): 8.740546226501465
+Training finished. Evaluating on the test set...
+Problem mode set to: test
+Epoch Results:
+test/sym_rel_regret_mean: 0.2631
+validation/abs_regret_mean: 8.7801
+test/select_item_mean: 0.3446
+test/objective_mean: 15.0715
+test/mse_mean: 27.6908
+validation/mse_mean: 41.7814
+train/objective_mean: 17.3939
+train/rel_regret_mean: 0.3640
+train/loss_mean: 8.3570
+validation/objective_mean: 15.9067
+validation/sym_rel_regret_mean: 0.2593
+test/item_value_mean: 4.2429
+validation/rel_regret_mean: 0.3887
+test/rel_regret_mean: 0.4023
+train/abs_regret_mean: 8.3570
+validation/item_value_mean: 4.2792
+train/grad_norm_mean: 0.0000
+train/solver_calls_mean: 1299.0000
+train/sym_rel_regret_mean: 0.2399
+validation/select_item_mean: 0.3435
+test/abs_regret_mean: 8.9929
+Generating data using knapsack
+Computing optimal decisions for the entire dataset...
+Optimal decisions computed and added to dataset.
+Computing optimal objectives for the entire dataset...
+Optimal objectives computed and added to dataset.
+Shuffling indices before splitting...
+Dataset split completed: Train=375, Validation=75, Test=50
+Problem mode set to: train
+Problem mode set to: train
+Epoch 0/5: Starting initial validation...
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3190
+validation/abs_regret_mean: 7.4671
+validation/rel_regret_mean: 0.2468
+validation/select_item_mean: 0.4999
+validation/objective_mean: 21.8615
+validation/sym_rel_regret_mean: 0.1521
+validation/mse_mean: 36.8984
+Initial best validation metric (abs_regret): 7.467118263244629
+Starting training...
+Epoch: 1/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3190
+validation/abs_regret_mean: 7.4671
+train/objective_mean: 22.8163
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2468
+train/rel_regret_mean: 0.2643
+train/solver_calls_mean: 399.0000
+train/abs_regret_mean: 9.2343
+validation/select_item_mean: 0.4999
+train/sym_rel_regret_mean: 0.1621
+train/loss_mean: 9.2343
+validation/objective_mean: 21.8615
+validation/sym_rel_regret_mean: 0.1521
+validation/mse_mean: 36.8984
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3161
+validation/abs_regret_mean: 7.4305
+train/objective_mean: 22.8163
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2463
+train/rel_regret_mean: 0.2643
+train/solver_calls_mean: 399.0000
+train/abs_regret_mean: 9.2343
+validation/select_item_mean: 0.4995
+train/sym_rel_regret_mean: 0.1621
+train/loss_mean: 9.2343
+validation/objective_mean: 21.8981
+validation/sym_rel_regret_mean: 0.1514
+validation/mse_mean: 36.9000
+Validation evaluation (abs_regret): 7.393787384033203
+New best validation evaluation (abs_regret): 7.393787384033203 (was 7.467118263244629)
+Epoch: 2/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3161
+validation/abs_regret_mean: 7.4305
+train/objective_mean: 22.7002
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2463
+train/rel_regret_mean: 0.2691
+train/solver_calls_mean: 624.0000
+train/abs_regret_mean: 9.5131
+validation/select_item_mean: 0.4995
+train/sym_rel_regret_mean: 0.1658
+train/loss_mean: 9.5131
+validation/objective_mean: 21.8981
+validation/sym_rel_regret_mean: 0.1514
+validation/mse_mean: 36.9000
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3140
+validation/abs_regret_mean: 7.4865
+train/objective_mean: 22.7002
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2505
+train/rel_regret_mean: 0.2691
+train/solver_calls_mean: 624.0000
+train/abs_regret_mean: 9.5131
+validation/select_item_mean: 0.4990
+train/sym_rel_regret_mean: 0.1658
+train/loss_mean: 9.5131
+validation/objective_mean: 21.8421
+validation/sym_rel_regret_mean: 0.1541
+validation/mse_mean: 36.9004
+Validation evaluation (abs_regret): 7.598570823669434
+Epoch: 3/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3140
+validation/abs_regret_mean: 7.4865
+train/objective_mean: 22.2493
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2505
+train/rel_regret_mean: 0.2738
+train/solver_calls_mean: 849.0000
+train/abs_regret_mean: 9.3706
+validation/select_item_mean: 0.4990
+train/sym_rel_regret_mean: 0.1693
+train/loss_mean: 9.3706
+validation/objective_mean: 21.8421
+validation/sym_rel_regret_mean: 0.1541
+validation/mse_mean: 36.9004
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3129
+validation/abs_regret_mean: 7.5014
+train/objective_mean: 22.2493
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2524
+train/rel_regret_mean: 0.2738
+train/solver_calls_mean: 849.0000
+train/abs_regret_mean: 9.3706
+validation/select_item_mean: 0.4985
+train/sym_rel_regret_mean: 0.1693
+train/loss_mean: 9.3706
+validation/objective_mean: 21.8272
+validation/sym_rel_regret_mean: 0.1553
+validation/mse_mean: 36.8997
+Validation evaluation (abs_regret): 7.545968532562256
+Epoch: 4/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3129
+validation/abs_regret_mean: 7.5014
+train/objective_mean: 22.4115
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2524
+train/rel_regret_mean: 0.2738
+train/solver_calls_mean: 1074.0000
+train/abs_regret_mean: 9.2697
+validation/select_item_mean: 0.4985
+train/sym_rel_regret_mean: 0.1695
+train/loss_mean: 9.2697
+validation/objective_mean: 21.8272
+validation/sym_rel_regret_mean: 0.1553
+validation/mse_mean: 36.8997
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3129
+validation/abs_regret_mean: 7.5231
+train/objective_mean: 22.4115
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2541
+train/rel_regret_mean: 0.2738
+train/solver_calls_mean: 1074.0000
+train/abs_regret_mean: 9.2697
+validation/select_item_mean: 0.4982
+train/sym_rel_regret_mean: 0.1695
+train/loss_mean: 9.2697
+validation/objective_mean: 21.8055
+validation/sym_rel_regret_mean: 0.1564
+validation/mse_mean: 36.8983
+Validation evaluation (abs_regret): 7.6102375984191895
+Epoch: 5/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3129
+validation/abs_regret_mean: 7.5231
+train/objective_mean: 22.3170
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2541
+train/rel_regret_mean: 0.2733
+train/solver_calls_mean: 1299.0000
+train/abs_regret_mean: 9.1233
+validation/select_item_mean: 0.4982
+train/sym_rel_regret_mean: 0.1691
+train/loss_mean: 9.1233
+validation/objective_mean: 21.8055
+validation/sym_rel_regret_mean: 0.1564
+validation/mse_mean: 36.8983
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3132
+validation/abs_regret_mean: 7.5446
+train/objective_mean: 22.3170
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2555
+train/rel_regret_mean: 0.2733
+train/solver_calls_mean: 1299.0000
+train/abs_regret_mean: 9.1233
+validation/select_item_mean: 0.4980
+train/sym_rel_regret_mean: 0.1691
+train/loss_mean: 9.1233
+validation/objective_mean: 21.7839
+validation/sym_rel_regret_mean: 0.1573
+validation/mse_mean: 36.8970
+Validation evaluation (abs_regret): 7.652194023132324
+Training finished. Evaluating on the test set...
+Problem mode set to: test
+Epoch Results:
+test/sym_rel_regret_mean: 0.1524
+validation/abs_regret_mean: 7.5446
+test/select_item_mean: 0.4987
+test/objective_mean: 22.1214
+test/mse_mean: 21.6328
+validation/mse_mean: 36.8970
+train/objective_mean: 22.3170
+train/rel_regret_mean: 0.2733
+train/loss_mean: 9.1233
+validation/objective_mean: 21.7839
+validation/sym_rel_regret_mean: 0.1573
+test/item_value_mean: 4.2913
+validation/rel_regret_mean: 0.2555
+test/rel_regret_mean: 0.2462
+train/abs_regret_mean: 9.1233
+validation/item_value_mean: 4.3132
+train/grad_norm_mean: 0.0000
+train/solver_calls_mean: 1299.0000
+train/sym_rel_regret_mean: 0.1691
+validation/select_item_mean: 0.4980
+test/abs_regret_mean: 7.6697
+Generating data using knapsack
+Computing optimal decisions for the entire dataset...
+Optimal decisions computed and added to dataset.
+Computing optimal objectives for the entire dataset...
+Optimal objectives computed and added to dataset.
+Shuffling indices before splitting...
+Dataset split completed: Train=375, Validation=75, Test=50
+Problem mode set to: train
+Problem mode set to: train
+Epoch 0/5: Starting initial validation...
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8620
+validation/abs_regret_mean: 6.3541
+validation/rel_regret_mean: 0.2326
+validation/select_item_mean: 0.4642
+validation/objective_mean: 21.4090
+validation/sym_rel_regret_mean: 0.1394
+validation/mse_mean: 23.9004
+Initial best validation metric (abs_regret): 6.3540873527526855
+Starting training...
+Epoch: 1/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 3.8620
+validation/abs_regret_mean: 6.3541
+train/objective_mean: 20.2832
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2326
+train/rel_regret_mean: 0.2800
+train/solver_calls_mean: 399.0000
+train/abs_regret_mean: 9.6839
+validation/select_item_mean: 0.4642
+train/sym_rel_regret_mean: 0.1752
+train/loss_mean: 9.6839
+validation/objective_mean: 21.4090
+validation/sym_rel_regret_mean: 0.1394
+validation/mse_mean: 23.9004
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8444
+validation/abs_regret_mean: 6.3782
+train/objective_mean: 20.2832
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2343
+train/rel_regret_mean: 0.2800
+train/solver_calls_mean: 399.0000
+train/abs_regret_mean: 9.6839
+validation/select_item_mean: 0.4630
+train/sym_rel_regret_mean: 0.1752
+train/loss_mean: 9.6839
+validation/objective_mean: 21.3849
+validation/sym_rel_regret_mean: 0.1409
+validation/mse_mean: 24.0629
+Validation evaluation (abs_regret): 6.402392387390137
+Epoch: 2/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 3.8444
+validation/abs_regret_mean: 6.3782
+train/objective_mean: 20.3595
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2343
+train/rel_regret_mean: 0.2774
+train/solver_calls_mean: 624.0000
+train/abs_regret_mean: 9.4010
+validation/select_item_mean: 0.4630
+train/sym_rel_regret_mean: 0.1726
+train/loss_mean: 9.4010
+validation/objective_mean: 21.3849
+validation/sym_rel_regret_mean: 0.1409
+validation/mse_mean: 24.0629
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8283
+validation/abs_regret_mean: 6.5417
+train/objective_mean: 20.3595
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2368
+train/rel_regret_mean: 0.2774
+train/solver_calls_mean: 624.0000
+train/abs_regret_mean: 9.4010
+validation/select_item_mean: 0.4620
+train/sym_rel_regret_mean: 0.1726
+train/loss_mean: 9.4010
+validation/objective_mean: 21.2214
+validation/sym_rel_regret_mean: 0.1427
+validation/mse_mean: 24.2485
+Validation evaluation (abs_regret): 6.868767261505127
+Epoch: 3/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 3.8283
+validation/abs_regret_mean: 6.5417
+train/objective_mean: 20.4110
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2368
+train/rel_regret_mean: 0.2779
+train/solver_calls_mean: 849.0000
+train/abs_regret_mean: 9.4496
+validation/select_item_mean: 0.4620
+train/sym_rel_regret_mean: 0.1729
+train/loss_mean: 9.4496
+validation/objective_mean: 21.2214
+validation/sym_rel_regret_mean: 0.1427
+validation/mse_mean: 24.2485
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8133
+validation/abs_regret_mean: 6.7127
+train/objective_mean: 20.4110
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2405
+train/rel_regret_mean: 0.2779
+train/solver_calls_mean: 849.0000
+train/abs_regret_mean: 9.4496
+validation/select_item_mean: 0.4612
+train/sym_rel_regret_mean: 0.1729
+train/loss_mean: 9.4496
+validation/objective_mean: 21.0504
+validation/sym_rel_regret_mean: 0.1454
+validation/mse_mean: 24.4392
+Validation evaluation (abs_regret): 7.225523948669434
+Epoch: 4/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 3.8133
+validation/abs_regret_mean: 6.7127
+train/objective_mean: 20.2830
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2405
+train/rel_regret_mean: 0.2788
+train/solver_calls_mean: 1074.0000
+train/abs_regret_mean: 9.4682
+validation/select_item_mean: 0.4612
+train/sym_rel_regret_mean: 0.1733
+train/loss_mean: 9.4682
+validation/objective_mean: 21.0504
+validation/sym_rel_regret_mean: 0.1454
+validation/mse_mean: 24.4392
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.7994
+validation/abs_regret_mean: 6.8234
+train/objective_mean: 20.2830
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2432
+train/rel_regret_mean: 0.2788
+train/solver_calls_mean: 1074.0000
+train/abs_regret_mean: 9.4682
+validation/select_item_mean: 0.4606
+train/sym_rel_regret_mean: 0.1733
+train/loss_mean: 9.4682
+validation/objective_mean: 20.9397
+validation/sym_rel_regret_mean: 0.1474
+validation/mse_mean: 24.6191
+Validation evaluation (abs_regret): 7.266391754150391
+Epoch: 5/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 3.7994
+validation/abs_regret_mean: 6.8234
+train/objective_mean: 20.3556
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2432
+train/rel_regret_mean: 0.2809
+train/solver_calls_mean: 1299.0000
+train/abs_regret_mean: 9.5712
+validation/select_item_mean: 0.4606
+train/sym_rel_regret_mean: 0.1747
+train/loss_mean: 9.5712
+validation/objective_mean: 20.9397
+validation/sym_rel_regret_mean: 0.1474
+validation/mse_mean: 24.6191
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.7872
+validation/abs_regret_mean: 6.9027
+train/objective_mean: 20.3556
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2451
+train/rel_regret_mean: 0.2809
+train/solver_calls_mean: 1299.0000
+train/abs_regret_mean: 9.5712
+validation/select_item_mean: 0.4602
+train/sym_rel_regret_mean: 0.1747
+train/loss_mean: 9.5712
+validation/objective_mean: 20.8604
+validation/sym_rel_regret_mean: 0.1489
+validation/mse_mean: 24.7766
+Validation evaluation (abs_regret): 7.298919200897217
+Training finished. Evaluating on the test set...
+Problem mode set to: test
+Epoch Results:
+test/sym_rel_regret_mean: 0.1573
+validation/abs_regret_mean: 6.9027
+test/select_item_mean: 0.4629
+test/objective_mean: 20.6775
+test/mse_mean: 44.9416
+validation/mse_mean: 24.7766
+train/objective_mean: 20.3556
+train/rel_regret_mean: 0.2809
+train/loss_mean: 9.5712
+validation/objective_mean: 20.8604
+validation/sym_rel_regret_mean: 0.1489
+test/item_value_mean: 3.8784
+validation/rel_regret_mean: 0.2451
+test/rel_regret_mean: 0.2576
+train/abs_regret_mean: 9.5712
+validation/item_value_mean: 3.7872
+train/grad_norm_mean: 0.0000
+train/solver_calls_mean: 1299.0000
+train/sym_rel_regret_mean: 0.1747
+validation/select_item_mean: 0.4602
+test/abs_regret_mean: 8.6495
+[I 2025-10-02 14:46:34,998] Trial 34 finished with value: 7.461659908294678 and parameters: {&#39;learning_rate&#39;: 0.0002779889567061767, &#39;batch_size&#39;: 273}. Best is trial 6 with value: 3.5843217372894287.
+Generating data using knapsack
+Computing optimal decisions for the entire dataset...
+Optimal decisions computed and added to dataset.
+Computing optimal objectives for the entire dataset...
+Optimal objectives computed and added to dataset.
+Shuffling indices before splitting...
+Dataset split completed: Train=375, Validation=75, Test=50
+Problem mode set to: train
+Problem mode set to: train
+Epoch 0/5: Starting initial validation...
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3376
+validation/abs_regret_mean: 8.9304
+validation/rel_regret_mean: 0.4107
+validation/select_item_mean: 0.3410
+validation/objective_mean: 15.7564
+validation/sym_rel_regret_mean: 0.2772
+validation/mse_mean: 41.6570
+Initial best validation metric (abs_regret): 8.930413246154785
+Starting training...
+Epoch: 1/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3376
+validation/abs_regret_mean: 8.9304
+train/objective_mean: 17.5023
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4107
+train/rel_regret_mean: 0.3751
+train/solver_calls_mean: 366.0000
+train/abs_regret_mean: 8.1212
+validation/select_item_mean: 0.3410
+train/sym_rel_regret_mean: 0.2492
+train/loss_mean: 8.1212
+validation/objective_mean: 15.7564
+validation/sym_rel_regret_mean: 0.2772
+validation/mse_mean: 41.6570
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3423
+validation/abs_regret_mean: 9.0795
+train/objective_mean: 17.5023
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4145
+train/rel_regret_mean: 0.3751
+train/solver_calls_mean: 366.0000
+train/abs_regret_mean: 8.1212
+validation/select_item_mean: 0.3410
+train/sym_rel_regret_mean: 0.2492
+train/loss_mean: 8.1212
+validation/objective_mean: 15.6074
+validation/sym_rel_regret_mean: 0.2802
+validation/mse_mean: 41.7311
+Validation evaluation (abs_regret): 9.228492736816406
+Epoch: 2/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3423
+validation/abs_regret_mean: 9.0795
+train/objective_mean: 17.5072
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4145
+train/rel_regret_mean: 0.3756
+train/solver_calls_mean: 591.0000
+train/abs_regret_mean: 8.1807
+validation/select_item_mean: 0.3410
+train/sym_rel_regret_mean: 0.2496
+train/loss_mean: 8.1807
+validation/objective_mean: 15.6074
+validation/sym_rel_regret_mean: 0.2802
+validation/mse_mean: 41.7311
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3485
+validation/abs_regret_mean: 9.1311
+train/objective_mean: 17.5072
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4159
+train/rel_regret_mean: 0.3756
+train/solver_calls_mean: 591.0000
+train/abs_regret_mean: 8.1807
+validation/select_item_mean: 0.3409
+train/sym_rel_regret_mean: 0.2496
+train/loss_mean: 8.1807
+validation/objective_mean: 15.5557
+validation/sym_rel_regret_mean: 0.2814
+validation/mse_mean: 41.7903
+Validation evaluation (abs_regret): 9.234533309936523
+Epoch: 3/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3485
+validation/abs_regret_mean: 9.1311
+train/objective_mean: 17.6069
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4159
+train/rel_regret_mean: 0.3758
+train/solver_calls_mean: 816.0000
+train/abs_regret_mean: 8.1811
+validation/select_item_mean: 0.3409
+train/sym_rel_regret_mean: 0.2498
+train/loss_mean: 8.1811
+validation/objective_mean: 15.5557
+validation/sym_rel_regret_mean: 0.2814
+validation/mse_mean: 41.7903
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3524
+validation/abs_regret_mean: 9.0944
+train/objective_mean: 17.6069
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4155
+train/rel_regret_mean: 0.3758
+train/solver_calls_mean: 816.0000
+train/abs_regret_mean: 8.1811
+validation/select_item_mean: 0.3410
+train/sym_rel_regret_mean: 0.2498
+train/loss_mean: 8.1811
+validation/objective_mean: 15.5924
+validation/sym_rel_regret_mean: 0.2810
+validation/mse_mean: 41.8421
+Validation evaluation (abs_regret): 8.984299659729004
+Epoch: 4/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3524
+validation/abs_regret_mean: 9.0944
+train/objective_mean: 17.6429
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4155
+train/rel_regret_mean: 0.3757
+train/solver_calls_mean: 1041.0000
+train/abs_regret_mean: 8.1781
+validation/select_item_mean: 0.3410
+train/sym_rel_regret_mean: 0.2497
+train/loss_mean: 8.1781
+validation/objective_mean: 15.5924
+validation/sym_rel_regret_mean: 0.2810
+validation/mse_mean: 41.8421
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3561
+validation/abs_regret_mean: 9.0192
+train/objective_mean: 17.6429
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4148
+train/rel_regret_mean: 0.3757
+train/solver_calls_mean: 1041.0000
+train/abs_regret_mean: 8.1781
+validation/select_item_mean: 0.3410
+train/sym_rel_regret_mean: 0.2497
+train/loss_mean: 8.1781
+validation/objective_mean: 15.6677
+validation/sym_rel_regret_mean: 0.2805
+validation/mse_mean: 41.8860
+Validation evaluation (abs_regret): 8.718032836914062
+New best validation evaluation (abs_regret): 8.718032836914062 (was 8.930413246154785)
+Epoch: 5/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3561
+validation/abs_regret_mean: 9.0192
+train/objective_mean: 17.6281
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4148
+train/rel_regret_mean: 0.3759
+train/solver_calls_mean: 1266.0000
+train/abs_regret_mean: 8.1810
+validation/select_item_mean: 0.3410
+train/sym_rel_regret_mean: 0.2499
+train/loss_mean: 8.1810
+validation/objective_mean: 15.6677
+validation/sym_rel_regret_mean: 0.2805
+validation/mse_mean: 41.8860
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3603
+validation/abs_regret_mean: 9.0139
+train/objective_mean: 17.6281
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.4149
+train/rel_regret_mean: 0.3759
+train/solver_calls_mean: 1266.0000
+train/abs_regret_mean: 8.1810
+validation/select_item_mean: 0.3410
+train/sym_rel_regret_mean: 0.2499
+train/loss_mean: 8.1810
+validation/objective_mean: 15.6729
+validation/sym_rel_regret_mean: 0.2807
+validation/mse_mean: 41.9246
+Validation evaluation (abs_regret): 8.987735748291016
+Training finished. Evaluating on the test set...
+Problem mode set to: test
+Epoch Results:
+test/sym_rel_regret_mean: 0.2909
+validation/abs_regret_mean: 9.0139
+test/select_item_mean: 0.3410
+test/objective_mean: 14.5432
+test/mse_mean: 27.8790
+validation/mse_mean: 41.9246
+train/objective_mean: 17.6281
+train/rel_regret_mean: 0.3759
+train/loss_mean: 8.1810
+validation/objective_mean: 15.6729
+validation/sym_rel_regret_mean: 0.2807
+test/item_value_mean: 4.3527
+validation/rel_regret_mean: 0.4149
+test/rel_regret_mean: 0.4316
+train/abs_regret_mean: 8.1810
+validation/item_value_mean: 4.3603
+train/grad_norm_mean: 0.0000
+train/solver_calls_mean: 1266.0000
+train/sym_rel_regret_mean: 0.2499
+validation/select_item_mean: 0.3410
+test/abs_regret_mean: 9.5212
+Generating data using knapsack
+Computing optimal decisions for the entire dataset...
+Optimal decisions computed and added to dataset.
+Computing optimal objectives for the entire dataset...
+Optimal objectives computed and added to dataset.
+Shuffling indices before splitting...
+Dataset split completed: Train=375, Validation=75, Test=50
+Problem mode set to: train
+Problem mode set to: train
+Epoch 0/5: Starting initial validation...
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3190
+validation/abs_regret_mean: 7.4671
+validation/rel_regret_mean: 0.2468
+validation/select_item_mean: 0.4999
+validation/objective_mean: 21.8615
+validation/sym_rel_regret_mean: 0.1521
+validation/mse_mean: 36.8984
+Initial best validation metric (abs_regret): 7.467118263244629
+Starting training...
+Epoch: 1/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3190
+validation/abs_regret_mean: 7.4671
+train/objective_mean: 22.4658
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2468
+train/rel_regret_mean: 0.2633
+train/solver_calls_mean: 366.0000
+train/abs_regret_mean: 8.9073
+validation/select_item_mean: 0.4999
+train/sym_rel_regret_mean: 0.1615
+train/loss_mean: 8.9073
+validation/objective_mean: 21.8615
+validation/sym_rel_regret_mean: 0.1521
+validation/mse_mean: 36.8984
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3195
+validation/abs_regret_mean: 7.5399
+train/objective_mean: 22.4658
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2476
+train/rel_regret_mean: 0.2633
+train/solver_calls_mean: 366.0000
+train/abs_regret_mean: 8.9073
+validation/select_item_mean: 0.5000
+train/sym_rel_regret_mean: 0.1615
+train/loss_mean: 8.9073
+validation/objective_mean: 21.7887
+validation/sym_rel_regret_mean: 0.1525
+validation/mse_mean: 36.8911
+Validation evaluation (abs_regret): 7.612639904022217
+Epoch: 2/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3195
+validation/abs_regret_mean: 7.5399
+train/objective_mean: 22.4555
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2476
+train/rel_regret_mean: 0.2647
+train/solver_calls_mean: 591.0000
+train/abs_regret_mean: 8.9435
+validation/select_item_mean: 0.5000
+train/sym_rel_regret_mean: 0.1626
+train/loss_mean: 8.9435
+validation/objective_mean: 21.7887
+validation/sym_rel_regret_mean: 0.1525
+validation/mse_mean: 36.8911
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3190
+validation/abs_regret_mean: 7.5802
+train/objective_mean: 22.4555
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2481
+train/rel_regret_mean: 0.2647
+train/solver_calls_mean: 591.0000
+train/abs_regret_mean: 8.9435
+validation/select_item_mean: 0.4998
+train/sym_rel_regret_mean: 0.1626
+train/loss_mean: 8.9435
+validation/objective_mean: 21.7483
+validation/sym_rel_regret_mean: 0.1529
+validation/mse_mean: 36.8897
+Validation evaluation (abs_regret): 7.660989761352539
+Epoch: 3/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3190
+validation/abs_regret_mean: 7.5802
+train/objective_mean: 22.3647
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2481
+train/rel_regret_mean: 0.2656
+train/solver_calls_mean: 816.0000
+train/abs_regret_mean: 8.9383
+validation/select_item_mean: 0.4998
+train/sym_rel_regret_mean: 0.1633
+train/loss_mean: 8.9383
+validation/objective_mean: 21.7483
+validation/sym_rel_regret_mean: 0.1529
+validation/mse_mean: 36.8897
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3186
+validation/abs_regret_mean: 7.5621
+train/objective_mean: 22.3647
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2474
+train/rel_regret_mean: 0.2656
+train/solver_calls_mean: 816.0000
+train/abs_regret_mean: 8.9383
+validation/select_item_mean: 0.4999
+train/sym_rel_regret_mean: 0.1633
+train/loss_mean: 8.9383
+validation/objective_mean: 21.7665
+validation/sym_rel_regret_mean: 0.1523
+validation/mse_mean: 36.8897
+Validation evaluation (abs_regret): 7.507469177246094
+Epoch: 4/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3186
+validation/abs_regret_mean: 7.5621
+train/objective_mean: 22.3479
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2474
+train/rel_regret_mean: 0.2658
+train/solver_calls_mean: 1041.0000
+train/abs_regret_mean: 8.9617
+validation/select_item_mean: 0.4999
+train/sym_rel_regret_mean: 0.1633
+train/loss_mean: 8.9617
+validation/objective_mean: 21.7665
+validation/sym_rel_regret_mean: 0.1523
+validation/mse_mean: 36.8897
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3180
+validation/abs_regret_mean: 7.6164
+train/objective_mean: 22.3479
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2476
+train/rel_regret_mean: 0.2658
+train/solver_calls_mean: 1041.0000
+train/abs_regret_mean: 8.9617
+validation/select_item_mean: 0.4999
+train/sym_rel_regret_mean: 0.1633
+train/loss_mean: 8.9617
+validation/objective_mean: 21.7122
+validation/sym_rel_regret_mean: 0.1523
+validation/mse_mean: 36.8905
+Validation evaluation (abs_regret): 7.8338470458984375
+Epoch: 5/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 4.3180
+validation/abs_regret_mean: 7.6164
+train/objective_mean: 22.3202
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2476
+train/rel_regret_mean: 0.2661
+train/solver_calls_mean: 1266.0000
+train/abs_regret_mean: 8.9705
+validation/select_item_mean: 0.4999
+train/sym_rel_regret_mean: 0.1635
+train/loss_mean: 8.9705
+validation/objective_mean: 21.7122
+validation/sym_rel_regret_mean: 0.1523
+validation/mse_mean: 36.8905
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 4.3173
+validation/abs_regret_mean: 7.6573
+train/objective_mean: 22.3202
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2479
+train/rel_regret_mean: 0.2661
+train/solver_calls_mean: 1266.0000
+train/abs_regret_mean: 8.9705
+validation/select_item_mean: 0.5000
+train/sym_rel_regret_mean: 0.1635
+train/loss_mean: 8.9705
+validation/objective_mean: 21.6713
+validation/sym_rel_regret_mean: 0.1525
+validation/mse_mean: 36.8910
+Validation evaluation (abs_regret): 7.861616134643555
+Training finished. Evaluating on the test set...
+Problem mode set to: test
+Epoch Results:
+test/sym_rel_regret_mean: 0.1470
+validation/abs_regret_mean: 7.6573
+test/select_item_mean: 0.5009
+test/objective_mean: 22.2512
+test/mse_mean: 21.6585
+validation/mse_mean: 36.8910
+train/objective_mean: 22.3202
+train/rel_regret_mean: 0.2661
+train/loss_mean: 8.9705
+validation/objective_mean: 21.6713
+validation/sym_rel_regret_mean: 0.1525
+test/item_value_mean: 4.2974
+validation/rel_regret_mean: 0.2479
+test/rel_regret_mean: 0.2393
+train/abs_regret_mean: 8.9705
+validation/item_value_mean: 4.3173
+train/grad_norm_mean: 0.0000
+train/solver_calls_mean: 1266.0000
+train/sym_rel_regret_mean: 0.1635
+validation/select_item_mean: 0.5000
+test/abs_regret_mean: 7.5399
+Generating data using knapsack
+Computing optimal decisions for the entire dataset...
+Optimal decisions computed and added to dataset.
+Computing optimal objectives for the entire dataset...
+Optimal objectives computed and added to dataset.
+Shuffling indices before splitting...
+Dataset split completed: Train=375, Validation=75, Test=50
+Problem mode set to: train
+Problem mode set to: train
+Epoch 0/5: Starting initial validation...
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8620
+validation/abs_regret_mean: 6.3541
+validation/rel_regret_mean: 0.2326
+validation/select_item_mean: 0.4642
+validation/objective_mean: 21.4090
+validation/sym_rel_regret_mean: 0.1394
+validation/mse_mean: 23.9004
+Initial best validation metric (abs_regret): 6.3540873527526855
+Starting training...
+Epoch: 1/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 3.8620
+validation/abs_regret_mean: 6.3541
+train/objective_mean: 20.7245
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2326
+train/rel_regret_mean: 0.2782
+train/solver_calls_mean: 366.0000
+train/abs_regret_mean: 9.5514
+validation/select_item_mean: 0.4642
+train/sym_rel_regret_mean: 0.1737
+train/loss_mean: 9.5514
+validation/objective_mean: 21.4090
+validation/sym_rel_regret_mean: 0.1394
+validation/mse_mean: 23.9004
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8590
+validation/abs_regret_mean: 6.3039
+train/objective_mean: 20.7245
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2309
+train/rel_regret_mean: 0.2782
+train/solver_calls_mean: 366.0000
+train/abs_regret_mean: 9.5514
+validation/select_item_mean: 0.4642
+train/sym_rel_regret_mean: 0.1737
+train/loss_mean: 9.5514
+validation/objective_mean: 21.4592
+validation/sym_rel_regret_mean: 0.1382
+validation/mse_mean: 23.9069
+Validation evaluation (abs_regret): 6.2537665367126465
+New best validation evaluation (abs_regret): 6.2537665367126465 (was 6.3540873527526855)
+Epoch: 2/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 3.8590
+validation/abs_regret_mean: 6.3039
+train/objective_mean: 20.6433
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2309
+train/rel_regret_mean: 0.2784
+train/solver_calls_mean: 591.0000
+train/abs_regret_mean: 9.5200
+validation/select_item_mean: 0.4642
+train/sym_rel_regret_mean: 0.1737
+train/loss_mean: 9.5200
+validation/objective_mean: 21.4592
+validation/sym_rel_regret_mean: 0.1382
+validation/mse_mean: 23.9069
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8576
+validation/abs_regret_mean: 6.2924
+train/objective_mean: 20.6433
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2307
+train/rel_regret_mean: 0.2784
+train/solver_calls_mean: 591.0000
+train/abs_regret_mean: 9.5200
+validation/select_item_mean: 0.4644
+train/sym_rel_regret_mean: 0.1737
+train/loss_mean: 9.5200
+validation/objective_mean: 21.4707
+validation/sym_rel_regret_mean: 0.1380
+validation/mse_mean: 23.9020
+Validation evaluation (abs_regret): 6.269453525543213
+Epoch: 3/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 3.8576
+validation/abs_regret_mean: 6.2924
+train/objective_mean: 20.6505
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2307
+train/rel_regret_mean: 0.2774
+train/solver_calls_mean: 816.0000
+train/abs_regret_mean: 9.4776
+validation/select_item_mean: 0.4644
+train/sym_rel_regret_mean: 0.1730
+train/loss_mean: 9.4776
+validation/objective_mean: 21.4707
+validation/sym_rel_regret_mean: 0.1380
+validation/mse_mean: 23.9020
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8563
+validation/abs_regret_mean: 6.3087
+train/objective_mean: 20.6505
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2310
+train/rel_regret_mean: 0.2774
+train/solver_calls_mean: 816.0000
+train/abs_regret_mean: 9.4776
+validation/select_item_mean: 0.4645
+train/sym_rel_regret_mean: 0.1730
+train/loss_mean: 9.4776
+validation/objective_mean: 21.4544
+validation/sym_rel_regret_mean: 0.1381
+validation/mse_mean: 23.9000
+Validation evaluation (abs_regret): 6.3574676513671875
+Epoch: 4/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 3.8563
+validation/abs_regret_mean: 6.3087
+train/objective_mean: 20.6561
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2310
+train/rel_regret_mean: 0.2767
+train/solver_calls_mean: 1041.0000
+train/abs_regret_mean: 9.4738
+validation/select_item_mean: 0.4645
+train/sym_rel_regret_mean: 0.1724
+train/loss_mean: 9.4738
+validation/objective_mean: 21.4544
+validation/sym_rel_regret_mean: 0.1381
+validation/mse_mean: 23.9000
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8551
+validation/abs_regret_mean: 6.3184
+train/objective_mean: 20.6561
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2311
+train/rel_regret_mean: 0.2767
+train/solver_calls_mean: 1041.0000
+train/abs_regret_mean: 9.4738
+validation/select_item_mean: 0.4646
+train/sym_rel_regret_mean: 0.1724
+train/loss_mean: 9.4738
+validation/objective_mean: 21.4447
+validation/sym_rel_regret_mean: 0.1382
+validation/mse_mean: 23.9020
+Validation evaluation (abs_regret): 6.357056140899658
+Epoch: 5/5
+Problem mode set to: train
+Epoch Results:
+validation/item_value_mean: 3.8551
+validation/abs_regret_mean: 6.3184
+train/objective_mean: 20.6686
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2311
+train/rel_regret_mean: 0.2766
+train/solver_calls_mean: 1266.0000
+train/abs_regret_mean: 9.4917
+validation/select_item_mean: 0.4646
+train/sym_rel_regret_mean: 0.1723
+train/loss_mean: 9.4917
+validation/objective_mean: 21.4447
+validation/sym_rel_regret_mean: 0.1382
+validation/mse_mean: 23.9020
+Problem mode set to: validation
+Epoch Results:
+validation/item_value_mean: 3.8546
+validation/abs_regret_mean: 6.3250
+train/objective_mean: 20.6686
+train/grad_norm_mean: 0.0000
+validation/rel_regret_mean: 0.2312
+train/rel_regret_mean: 0.2766
+train/solver_calls_mean: 1266.0000
+train/abs_regret_mean: 9.4917
+validation/select_item_mean: 0.4646
+train/sym_rel_regret_mean: 0.1723
+train/loss_mean: 9.4917
+validation/objective_mean: 21.4382
+validation/sym_rel_regret_mean: 0.1383
+validation/mse_mean: 23.8999
+Validation evaluation (abs_regret): 6.357917785644531
+Training finished. Evaluating on the test set...
+Problem mode set to: test
+Epoch Results:
+test/sym_rel_regret_mean: 0.1569
+validation/abs_regret_mean: 6.3250
+test/select_item_mean: 0.4632
+test/objective_mean: 20.6937
+test/mse_mean: 44.9863
+validation/mse_mean: 23.8999
+train/objective_mean: 20.6686
+train/rel_regret_mean: 0.2766
+train/loss_mean: 9.4917
+validation/objective_mean: 21.4382
+validation/sym_rel_regret_mean: 0.1383
+test/item_value_mean: 3.8728
+validation/rel_regret_mean: 0.2312
+test/rel_regret_mean: 0.2568
+train/abs_regret_mean: 9.4917
+validation/item_value_mean: 3.8546
+train/grad_norm_mean: 0.0000
+train/solver_calls_mean: 1266.0000
+train/sym_rel_regret_mean: 0.1723
+validation/select_item_mean: 0.4646
+test/abs_regret_mean: 8.6334
+[I 2025-10-02 14:46:45,237] Trial 35 finished with value: 7.479639053344727 and parameters: {&#39;learning_rate&#39;: 0.0001445843349518752, &#39;batch_size&#39;: 207}. Best is trial 6 with value: 3.5843217372894287.
+</pre></div></div>
+</div>
+<h2 id="Retrieve-and-save-results">Retrieve and save results<a class="headerlink" href="#Retrieve-and-save-results" title="Link to this heading">¶</a></h2>
+<p>The dashboard summarizes the results. Alternatively results can be retrieved and saved as follows.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[9]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">optuna</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">src.utils.optuna</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_progress</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sqlite:///</span><span class="si">{</span><span class="n">OUTPUT_DIR</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">STUDY_NAME</span><span class="si">}</span><span class="s2">/database.db&quot;</span>
+<span class="n">studies</span> <span class="o">=</span> <span class="n">optuna</span><span class="o">.</span><span class="n">study</span><span class="o">.</span><span class="n">get_all_study_summaries</span><span class="p">(</span><span class="n">storage</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">study_summary</span> <span class="ow">in</span> <span class="n">studies</span><span class="p">:</span>
+    <span class="n">study_name</span> <span class="o">=</span> <span class="n">study_summary</span><span class="o">.</span><span class="n">study_name</span>
+    <span class="n">study</span> <span class="o">=</span> <span class="n">optuna</span><span class="o">.</span><span class="n">load_study</span><span class="p">(</span><span class="n">study_name</span><span class="o">=</span><span class="n">study_name</span><span class="p">,</span> <span class="n">storage</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Results study: </span><span class="si">{</span><span class="n">study_name</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Completed trials: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">study</span><span class="o">.</span><span class="n">trials</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Best value: </span><span class="si">{</span><span class="n">study</span><span class="o">.</span><span class="n">best_value</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Best parameters: </span><span class="si">{</span><span class="n">study</span><span class="o">.</span><span class="n">best_params</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+<span class="n">save_progress</span><span class="p">(</span><span class="n">study</span><span class="p">,</span> <span class="n">search_space</span><span class="p">,</span> <span class="n">OUTPUT_DIR</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Results study: test_study
+Completed trials: 36
+Best value: 3.5843
+Best parameters: {&#39;learning_rate&#39;: 0.000479018157702876, &#39;batch_size&#39;: 181}
+Best configuration saved to hparam_optimization_results/best_config.yaml
+</pre></div></div>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  
+  
+  <div class="md-footer-meta md-typeset">
+    
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-footer-copyright__highlight">
+        &#169; Copyright 2025 - 2025, Noah Schutte, Kim van den Houten, Grigorii Veviurko.
+        
+    </div>
+  
+    Created using
+    <a href="https://www.sphinx-doc.org/" target="_blank" rel="noopener">Sphinx</a>
+    8.1.3.
+     and
+    <a href="https://github.com/jbms/sphinx-immaterial/" target="_blank" rel="noopener">Sphinx-Immaterial</a>
+  
+</div>
+      
+    </div>
+    
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.expand", "navigation.top"], "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+        <script src="../_static/sphinx_immaterial_theme.32136f45f91ae6956.min.js?v=a7a9472a"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script id="MathJax-script" src="../_static/mathjax/tex-mml-chtml.js?v=cadf963e"></script>
+    
+  </body>
+</html>

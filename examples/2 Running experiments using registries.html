@@ -1,0 +1,1928 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="1%20The%20structure%20of%20PyDFLT.html">
+      
+      
+        <link rel="next" href="3%20Analyzing%20training%20using%20Weights%20and%20Biases.html">
+      
+      
+      <link rel="icon" href="">
+    
+    
+      
+        <title>2 Running experiments using registries - PyDFLT  documentation</title>
+      
+    
+    
+      
+        
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+        <link rel="stylesheet" type="text/css" href="../_static/sphinx_immaterial_theme.acf80fe7f4d9ef9e2.min.css?v=9e56d0d2" />
+        <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+        <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=8071119b" />
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#2.1-Registries" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="PyDFLT  documentation" class="md-header__button md-logo" aria-label="PyDFLT  documentation" data-md-component="logo">
+      <img src="../_static/logo_small.png" alt="logo">
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PyDFLT  documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              2 Running experiments using registries
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="green"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="green"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PyDFLT/PyDFLT/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PyDFLT
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="PyDFLT  documentation" class="md-nav__button md-logo" aria-label="PyDFLT  documentation" data-md-component="logo">
+      <img src="../_static/logo_small.png" alt="logo">
+    </a>
+    PyDFLT  documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PyDFLT/PyDFLT/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PyDFLT
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    <span>Examples</span>
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            <span>Examples</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1%20The%20structure%20of%20PyDFLT.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span title="/examples/1 the structure of pydflt.ipynb (reference label)"><span>1 The structure of Py<wbr>DFLT</span></span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    <span title="/examples/2 running experiments using registries.ipynb (reference label)"><span>2 Running experiments using registries</span></span>
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="#" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span title="/examples/2 running experiments using registries.ipynb (reference label)"><span>2 Running experiments using registries</span></span>
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#2.1-Registries" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/2 running experiments using registries.ipynb#2.1-registries (reference label)"><span>2.<wbr>1 Registries</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2.2-Configs-and-utils" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/2 running experiments using registries.ipynb#2.2-configs-and-utils (reference label)"><span>2.<wbr>2 Configs and utils</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3%20Analyzing%20training%20using%20Weights%20and%20Biases.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span title="/examples/3 analyzing training using weights and biases.ipynb (reference label)"><span>3 Analyzing training using Weights and Biases</span></span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4%20Hyperparameter%20tuning%20using%20Optuna.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span title="/examples/4 hyperparameter tuning using optuna.ipynb (reference label)"><span>4 Hyperparamater tuning using Optuna</span></span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5%20DFL%20methods%20for%20non-specific%20optimization%20models.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span title="/examples/5 dfl methods for non-specific optimization models.ipynb (reference label)"><span>5 DFL methods for non-<wbr>specific optimization models</span></span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    <span>API reference</span>
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            <span>API reference</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/src.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span title="/api/src.rst (reference label)"><span>Py<wbr>DFLT</span></span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#2.1-Registries" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/2 running experiments using registries.ipynb#2.1-registries (reference label)"><span>2.<wbr>1 Registries</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2.2-Configs-and-utils" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span title="/examples/2 running experiments using registries.ipynb#2.2-configs-and-utils (reference label)"><span>2.<wbr>2 Configs and utils</span></span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset" role="main">
+                
+                
+                  
+
+
+<h1 id="2-Running-experiments-using-registries">2 Running experiments using registries<a class="headerlink" href="#2-Running-experiments-using-registries" title="Link to this heading">¶</a></h1>
+<p>PyDFLT includes a few tools that make it easier to run experiments. This notebook introduces registries that have predefined configurations of methods, models and data from literature. In 2.2 the usage of configs and utils is shown to be able to easily run more extended experiments.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[ ]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="n">path_to_project</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;PyDFLT&quot;</span><span class="p">))))</span>
+<span class="c1"># Jupyter is not installed in your venv automatically, if you used uv the following will install jupyter: uv sync --group examples</span>
+</code></pre></div>
+</div>
+</div>
+<h2 id="2.1-Registries">2.1 Registries<a class="headerlink" href="#2.1-Registries" title="Link to this heading">¶</a></h2>
+<p>To make it easy to use different models, data and DFL methods from literature, we created different registries in <code class="docutils literal notranslate"><span class="pre">src.registries</span></code>. These 3 categories are stored here with the settings as they are relevant and appear in literature. It also makes it easy to specify a base version of a model, data or decision maker. Below are the currently stored registries. In the files themselves there are some comments regarding works that use about the same configuration, with slightly different parameters</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[1]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">src.registries.decision_makers</span><span class="w"> </span><span class="kn">import</span> <span class="n">decision_maker_registry</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src.utils.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_registry</span>
+
+<span class="n">print_registry</span><span class="p">(</span><span class="n">decision_maker_registry</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Auto-Sklearn cannot be imported.
+Name: differentiable
+Class/function: &lt;class &#39;src.decision_makers.differentiable_decision_maker.DifferentiableDecisionMaker&#39;&gt;
+Parameters: {&#39;learning_rate&#39;: 0.001, &#39;device_str&#39;: &#39;cpu&#39;, &#39;loss_function_str&#39;: &#39;regret&#39;, &#39;predictor_str&#39;: &#39;MLP&#39;}
+
+Name: PFL linear
+Class/function: &lt;class &#39;src.decision_makers.differentiable_decision_maker.DifferentiableDecisionMaker&#39;&gt;
+Parameters: {&#39;learning_rate&#39;: 0.001, &#39;device_str&#39;: &#39;cpu&#39;, &#39;loss_function_str&#39;: &#39;mse&#39;, &#39;predictor_str&#39;: &#39;MLP&#39;, &#39;predictor_kwargs&#39;: {&#39;num_hidden_layers&#39;: 0}}
+
+Name: SPO+ linear
+Class/function: &lt;class &#39;src.decision_makers.differentiable_decision_maker.DifferentiableDecisionMaker&#39;&gt;
+Parameters: {&#39;learning_rate&#39;: 0.001, &#39;device_str&#39;: &#39;cpu&#39;, &#39;loss_function_str&#39;: &#39;SPOPlus&#39;, &#39;predictor_str&#39;: &#39;MLP&#39;, &#39;predictor_kwargs&#39;: {&#39;num_hidden_layers&#39;: 0}}
+
+Name: SFGE
+Class/function: &lt;class &#39;src.decision_makers.sfge_decision_maker.SFGEDecisionMaker&#39;&gt;
+Parameters: {&#39;learning_rate&#39;: 0.01, &#39;batch_size&#39;: 32, &#39;device_str&#39;: &#39;cpu&#39;, &#39;loss_function_str&#39;: &#39;regret&#39;, &#39;predictor_str&#39;: &#39;MLP&#39;, &#39;noisifier_kwargs&#39;: {&#39;sigma_setting&#39;: &#39;independent&#39;}}
+
+Name: Lancer
+Class/function: &lt;class &#39;src.decision_makers.lancer_decision_maker.LancerDecisionMaker&#39;&gt;
+Parameters: {&#39;learning_rate&#39;: 0.01, &#39;batch_size&#39;: 32, &#39;device_str&#39;: &#39;cpu&#39;, &#39;predictor_str&#39;: &#39;MLP&#39;}
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[2]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">src.registries.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_registry</span>
+
+<span class="n">print_registry</span><span class="p">(</span><span class="n">model_registry</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Name: knapsack_2D_Tang2022
+Class/function: &lt;class &#39;src.concrete_models.grbpy_knapsack.GRBPYKnapsackModel&#39;&gt;
+Parameters: {&#39;num_decisions&#39;: 32, &#39;capacity&#39;: 20, &#39;weights_lb&#39;: 3, &#39;weights_ub&#39;: 8, &#39;dimension&#39;: 2, &#39;seed&#39;: 5}
+
+Name: shortest_path
+Class/function: &lt;class &#39;src.concrete_models.grbpy_shortest_path.ShortestPath&#39;&gt;
+Parameters: {&#39;grid&#39;: (5, 5)}
+
+Name: WSMC_Silvestri2024
+Class/function: &lt;class &#39;src.concrete_models.grbpy_two_stage_weighted_set_multi_cover.WeightedSetMultiCover&#39;&gt;
+Parameters: {&#39;num_items&#39;: 5, &#39;num_covers&#39;: 25, &#39;penalty&#39;: 5, &#39;cover_costs_lb&#39;: 1, &#39;cover_costs_ub&#39;: 100, &#39;Silvestri2024&#39;: True, &#39;seed&#39;: 5}
+
+Name: knapsack_continuous
+Class/function: &lt;class &#39;src.concrete_models.cvxpy_knapsack.CVXPYDiffKnapsackModel&#39;&gt;
+Parameters: {&#39;num_decisions&#39;: 10, &#39;capacity&#39;: 20, &#39;values_lb&#39;: 3, &#39;values_ub&#39;: 8, &#39;dimension&#39;: 2, &#39;seed&#39;: 5}
+
+Name: knapsack_2_stage
+Class/function: &lt;class &#39;src.concrete_models.grbpy_two_stage_knapsack.TwoStageKnapsack&#39;&gt;
+Parameters: {&#39;num_decision&#39;: 10, &#39;capacity&#39;: 20, &#39;penalty_add&#39;: 0.1, &#39;penalty_remove&#39;: 10, &#39;values_lb&#39;: 3, &#39;values_ub&#39;: 8, &#39;seed&#39;: 5}
+
+Name: wsmc_recovery_5x25
+Class/function: &lt;class &#39;src.concrete_models.grbpy_two_stage_weighted_set_multi_cover.WeightedSetMultiCover&#39;&gt;
+Parameters: {&#39;num_items&#39;: 5, &#39;num_covers&#39;: 25, &#39;penalty&#39;: 5, &#39;cover_costs_lb&#39;: 5, &#39;cover_costs_ub&#39;: 50, &#39;recovery_ratio&#39;: 0.8, &#39;seed&#39;: 5}
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[3]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">src.registries.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">data_registry</span>
+
+<span class="n">print_registry</span><span class="p">(</span><span class="n">data_registry</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Name: load_data_from_dict
+Class/function: &lt;function load_data_from_dict at 0x13574fa60&gt;
+Parameters: {&#39;path&#39;: None}
+
+Name: shortest_path
+Class/function: &lt;function gen_data_shortestpath at 0x121c0e5c0&gt;
+Parameters: {&#39;seed&#39;: 5, &#39;num_data&#39;: 2000, &#39;num_features&#39;: 5, &#39;grid&#39;: (5, 5), &#39;polynomial_degree&#39;: 6, &#39;noise_width&#39;: 0.5}
+
+Name: knapsack
+Class/function: &lt;function gen_data_knapsack at 0x121c0e480&gt;
+Parameters: {&#39;seed&#39;: 5, &#39;num_data&#39;: 2000, &#39;num_features&#39;: 5, &#39;num_items&#39;: 10, &#39;dimension&#39;: 2, &#39;polynomial_degree&#39;: 6, &#39;noise_width&#39;: 0.5}
+
+Name: WSMC_Silvestri2024
+Class/function: &lt;function gen_data_wsmc at 0x130de7ec0&gt;
+Parameters: {&#39;seed&#39;: 5, &#39;num_data&#39;: 2500, &#39;num_features&#39;: 5, &#39;num_items&#39;: 10, &#39;degree&#39;: 5, &#39;noise_width&#39;: 0.5}
+
+</pre></div></div>
+</div>
+<p>With these registries one can simply load a certain model, data generation and method. For example, if we want to apply DFL ot a shortest path problem using SPO+ [1] with a linear predictor, one can use:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[4]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">src.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">Problem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src.registries.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src.registries.decision_makers</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_decision_maker</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src.registries.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src.runner</span><span class="w"> </span><span class="kn">import</span> <span class="n">Runner</span>
+
+<span class="n">model</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">make_model</span><span class="p">(</span><span class="s2">&quot;shortest_path&quot;</span><span class="p">)</span>
+<span class="n">data</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_data</span><span class="p">(</span><span class="s2">&quot;shortest_path&quot;</span><span class="p">)</span>
+<span class="n">problem</span> <span class="o">=</span> <span class="n">Problem</span><span class="p">(</span><span class="n">data_dict</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">opt_model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+<span class="n">decision_maker</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">make_decision_maker</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span> <span class="s2">&quot;SPO+ linear&quot;</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>  <span class="c1"># adjust learning rate</span>
+<span class="n">runner</span> <span class="o">=</span> <span class="n">Runner</span><span class="p">(</span><span class="n">decision_maker</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">use_wandb</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Set parameter Username
+Set parameter LicenseID to value 2612263
+Academic license - for non-commercial use only - expires 2026-01-20
+Set parameter FeasibilityTol to value 1e-06
+Generating data using shortest_path
+Computing optimal decisions for the entire dataset...
+Optimal decisions computed and added to dataset.
+Computing optimal objectives for the entire dataset...
+Optimal objectives computed and added to dataset.
+Shuffling indices before splitting...
+Dataset split completed: Train=1400, Validation=300, Test=300
+Problem mode set to: train
+Problem mode set to: train
+Num of cores: 1
+Epoch 0/3: Starting initial validation...
+Problem mode set to: validation
+Epoch Results:
+validation/sym_rel_regret_mean: 0.3144
+validation/mse_mean: 2.9586
+validation/arc_costs_mean: 0.8145
+validation/rel_regret_mean: 1.2962
+validation/select_arc_mean: 0.2000
+validation/objective_mean: 6.0792
+validation/abs_regret_mean: 2.8480
+Initial best validation metric (abs_regret): 2.847959518432617
+Starting training...
+Epoch: 1/3
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 0.5058
+validation/sym_rel_regret_mean: 0.3144
+train/objective_mean: 3.5516
+train/loss_mean: 3.7989
+train/sym_rel_regret_mean: 0.0739
+validation/mse_mean: 2.9586
+validation/arc_costs_mean: 0.8145
+validation/rel_regret_mean: 1.2962
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 3.3784
+train/solver_calls_mean: 1019.8182
+train/rel_regret_mean: 0.1969
+validation/objective_mean: 6.0792
+validation/abs_regret_mean: 2.8480
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 0.5058
+validation/sym_rel_regret_mean: 0.1864
+train/objective_mean: 3.5516
+train/loss_mean: 3.7989
+train/sym_rel_regret_mean: 0.0739
+validation/mse_mean: 3.1112
+validation/arc_costs_mean: 0.7623
+validation/rel_regret_mean: 0.7190
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 3.3784
+train/solver_calls_mean: 1019.8182
+train/rel_regret_mean: 0.1969
+validation/objective_mean: 4.8626
+validation/abs_regret_mean: 1.6313
+Validation evaluation (abs_regret): 0.4147034287452698
+New best validation evaluation (abs_regret): 0.4147034287452698 (was 2.847959518432617)
+Epoch: 2/3
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 0.4282
+validation/sym_rel_regret_mean: 0.1864
+train/objective_mean: 3.4738
+train/loss_mean: 3.2933
+train/sym_rel_regret_mean: 0.0647
+validation/mse_mean: 3.1112
+validation/arc_costs_mean: 0.7623
+validation/rel_regret_mean: 0.7190
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 3.2610
+train/solver_calls_mean: 1869.8182
+train/rel_regret_mean: 0.1657
+validation/objective_mean: 4.8626
+validation/abs_regret_mean: 1.6313
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 0.4282
+validation/sym_rel_regret_mean: 0.1434
+train/objective_mean: 3.4738
+train/loss_mean: 3.2933
+train/sym_rel_regret_mean: 0.0647
+validation/mse_mean: 3.0537
+validation/arc_costs_mean: 0.7422
+validation/rel_regret_mean: 0.5264
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 3.2610
+train/solver_calls_mean: 1869.8182
+train/rel_regret_mean: 0.1657
+validation/objective_mean: 4.4307
+validation/abs_regret_mean: 1.1994
+Validation evaluation (abs_regret): 0.33561816811561584
+New best validation evaluation (abs_regret): 0.33561816811561584 (was 0.4147034287452698)
+Epoch: 3/3
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 0.4086
+validation/sym_rel_regret_mean: 0.1434
+train/objective_mean: 3.4526
+train/loss_mean: 3.1472
+train/sym_rel_regret_mean: 0.0619
+validation/mse_mean: 3.0537
+validation/arc_costs_mean: 0.7422
+validation/rel_regret_mean: 0.5264
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 3.2395
+train/solver_calls_mean: 2719.8182
+train/rel_regret_mean: 0.1579
+validation/objective_mean: 4.4307
+validation/abs_regret_mean: 1.1994
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 0.4086
+validation/sym_rel_regret_mean: 0.1218
+train/objective_mean: 3.4526
+train/loss_mean: 3.1472
+train/sym_rel_regret_mean: 0.0619
+validation/mse_mean: 3.0187
+validation/arc_costs_mean: 0.7323
+validation/rel_regret_mean: 0.4305
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 3.2395
+train/solver_calls_mean: 2719.8182
+train/rel_regret_mean: 0.1579
+validation/objective_mean: 4.2360
+validation/abs_regret_mean: 1.0048
+Validation evaluation (abs_regret): 0.42090854048728943
+Training finished. Evaluating on the test set...
+Problem mode set to: test
+Epoch Results:
+validation/sym_rel_regret_mean: 0.1218
+train/loss_mean: 3.1472
+test/mse_mean: 2.4907
+test/objective_mean: 3.4519
+test/sym_rel_regret_mean: 0.0639
+validation/abs_regret_mean: 1.0048
+validation/select_arc_mean: 0.2000
+test/arc_costs_mean: 0.6975
+validation/mse_mean: 3.0187
+test/rel_regret_mean: 0.1607
+train/solver_calls_mean: 2719.8182
+train/abs_regret_mean: 0.4086
+train/sym_rel_regret_mean: 0.0619
+train/objective_mean: 3.4526
+test/select_arc_mean: 0.2000
+validation/arc_costs_mean: 0.7323
+validation/rel_regret_mean: 0.4305
+train/grad_norm_mean: 3.2395
+train/rel_regret_mean: 0.1579
+validation/objective_mean: 4.2360
+test/abs_regret_mean: 0.3491
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[4]:
+</code></pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+np.float32(0.33561817)
+</pre></div></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">make_decision_maker</span></code>, <code class="docutils literal notranslate"><span class="pre">make_model</span></code> and <code class="docutils literal notranslate"><span class="pre">get_data</span></code> methods above return the used configuration as a second argument, such that it can be saved with the results.</p>
+<h2 id="2.2-Configs-and-utils">2.2 Configs and utils<a class="headerlink" href="#2.2-Configs-and-utils" title="Link to this heading">¶</a></h2>
+<p>Configs are most easily defined using as a <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file (though it is also possible to directly define dictionaries). Below we load an example config that for the <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">data</span></code> and <code class="docutils literal notranslate"><span class="pre">decision_maker</span></code> specifies a name from the registries.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[22]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+
+<span class="n">yaml_dir</span> <span class="o">=</span> <span class="s2">&quot;configs/shortest_path.yml&quot;</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">yaml_dir</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+model: {&#39;name&#39;: &#39;shortest_path&#39;}
+data: {&#39;name&#39;: &#39;shortest_path&#39;, &#39;num_data&#39;: 250}
+runner: {&#39;num_epochs&#39;: 5, &#39;use_wandb&#39;: False, &#39;save_best&#39;: True, &#39;experiments_folder&#39;: &#39;results/&#39;, &#39;seed&#39;: 5}
+problem: {&#39;train_ratio&#39;: 0.75, &#39;val_ratio&#39;: 0.15, &#39;seed&#39;: 5}
+decision_maker: {&#39;name&#39;: &#39;SPO+ linear&#39;, &#39;learning_rate&#39;: 0.005}
+</pre></div></div>
+</div>
+<p>Using configs we can directly run experiments with the <code class="docutils literal notranslate"><span class="pre">run</span></code> method from <code class="docutils literal notranslate"><span class="pre">src.utils.experiments</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[23]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">src.utils.experiments</span><span class="w"> </span><span class="kn">import</span> <span class="n">run</span>
+
+<span class="n">run</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Set parameter FeasibilityTol to value 1e-06
+Generating data using shortest_path
+Computing optimal decisions for the entire dataset...
+Optimal decisions computed and added to dataset.
+Computing optimal objectives for the entire dataset...
+Optimal objectives computed and added to dataset.
+Shuffling indices before splitting...
+Dataset split completed: Train=187, Validation=37, Test=26
+Problem mode set to: train
+Problem mode set to: train
+Num of cores: 1
+Epoch 0/5: Starting initial validation...
+Problem mode set to: validation
+Epoch Results:
+validation/sym_rel_regret_mean: 0.3749
+validation/mse_mean: 4.5052
+validation/arc_costs_mean: 0.7622
+validation/rel_regret_mean: 1.4082
+validation/select_arc_mean: 0.2000
+validation/objective_mean: 8.9562
+validation/abs_regret_mean: 5.0706
+Initial best validation metric (abs_regret): 5.070620536804199
+Starting training...
+Epoch: 1/5
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 3.4123
+validation/sym_rel_regret_mean: 0.3749
+train/objective_mean: 6.5024
+train/loss_mean: 11.8390
+train/sym_rel_regret_mean: 0.3383
+validation/mse_mean: 4.5052
+validation/arc_costs_mean: 0.7622
+validation/rel_regret_mean: 1.4082
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 5.6707
+train/solver_calls_mean: 148.1667
+train/rel_regret_mean: 1.3304
+validation/objective_mean: 8.9562
+validation/abs_regret_mean: 5.0706
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 3.4123
+validation/sym_rel_regret_mean: 0.3653
+train/objective_mean: 6.5024
+train/loss_mean: 11.8390
+train/sym_rel_regret_mean: 0.3383
+validation/mse_mean: 4.4398
+validation/arc_costs_mean: 0.7632
+validation/rel_regret_mean: 1.3430
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 5.6707
+train/solver_calls_mean: 148.1667
+train/rel_regret_mean: 1.3304
+validation/objective_mean: 8.7412
+validation/abs_regret_mean: 4.8556
+Validation evaluation (abs_regret): 4.640624046325684
+New best validation evaluation (abs_regret): 4.640624046325684 (was 5.070620536804199)
+Epoch: 2/5
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 3.2558
+validation/sym_rel_regret_mean: 0.3653
+train/objective_mean: 6.3473
+train/loss_mean: 11.1987
+train/sym_rel_regret_mean: 0.3294
+validation/mse_mean: 4.4398
+validation/arc_costs_mean: 0.7632
+validation/rel_regret_mean: 1.3430
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 5.5798
+train/solver_calls_mean: 260.1667
+train/rel_regret_mean: 1.2911
+validation/objective_mean: 8.7412
+validation/abs_regret_mean: 4.8556
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 3.2558
+validation/sym_rel_regret_mean: 0.3593
+train/objective_mean: 6.3473
+train/loss_mean: 11.1987
+train/sym_rel_regret_mean: 0.3294
+validation/mse_mean: 4.3795
+validation/arc_costs_mean: 0.7641
+validation/rel_regret_mean: 1.3184
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 5.5798
+train/solver_calls_mean: 260.1667
+train/rel_regret_mean: 1.2911
+validation/objective_mean: 8.5981
+validation/abs_regret_mean: 4.7126
+Validation evaluation (abs_regret): 4.426492214202881
+New best validation evaluation (abs_regret): 4.426492214202881 (was 4.640624046325684)
+Epoch: 3/5
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 3.0411
+validation/sym_rel_regret_mean: 0.3593
+train/objective_mean: 6.1363
+train/loss_mean: 10.5912
+train/sym_rel_regret_mean: 0.3147
+validation/mse_mean: 4.3795
+validation/arc_costs_mean: 0.7641
+validation/rel_regret_mean: 1.3184
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 5.5305
+train/solver_calls_mean: 372.1667
+train/rel_regret_mean: 1.2123
+validation/objective_mean: 8.5981
+validation/abs_regret_mean: 4.7126
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 3.0411
+validation/sym_rel_regret_mean: 0.3455
+train/objective_mean: 6.1363
+train/loss_mean: 10.5912
+train/sym_rel_regret_mean: 0.3147
+validation/mse_mean: 4.3218
+validation/arc_costs_mean: 0.7649
+validation/rel_regret_mean: 1.2549
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 5.5305
+train/solver_calls_mean: 372.1667
+train/rel_regret_mean: 1.2123
+validation/objective_mean: 8.2519
+validation/abs_regret_mean: 4.3664
+Validation evaluation (abs_regret): 3.3276705741882324
+New best validation evaluation (abs_regret): 3.3276705741882324 (was 4.426492214202881)
+Epoch: 4/5
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 2.8326
+validation/sym_rel_regret_mean: 0.3455
+train/objective_mean: 5.9283
+train/loss_mean: 9.9969
+train/sym_rel_regret_mean: 0.2988
+validation/mse_mean: 4.3218
+validation/arc_costs_mean: 0.7649
+validation/rel_regret_mean: 1.2549
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 5.3760
+train/solver_calls_mean: 484.1667
+train/rel_regret_mean: 1.1266
+validation/objective_mean: 8.2519
+validation/abs_regret_mean: 4.3664
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 2.8326
+validation/sym_rel_regret_mean: 0.3283
+train/objective_mean: 5.9283
+train/loss_mean: 9.9969
+train/sym_rel_regret_mean: 0.2988
+validation/mse_mean: 4.2671
+validation/arc_costs_mean: 0.7659
+validation/rel_regret_mean: 1.1711
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 5.3760
+train/solver_calls_mean: 484.1667
+train/rel_regret_mean: 1.1266
+validation/objective_mean: 7.9812
+validation/abs_regret_mean: 4.0957
+Validation evaluation (abs_regret): 3.012985944747925
+New best validation evaluation (abs_regret): 3.012985944747925 (was 3.3276705741882324)
+Epoch: 5/5
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 2.6555
+validation/sym_rel_regret_mean: 0.3283
+train/objective_mean: 5.7518
+train/loss_mean: 9.4416
+train/sym_rel_regret_mean: 0.2848
+validation/mse_mean: 4.2671
+validation/arc_costs_mean: 0.7659
+validation/rel_regret_mean: 1.1711
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 5.2495
+train/solver_calls_mean: 596.1667
+train/rel_regret_mean: 1.0541
+validation/objective_mean: 7.9812
+validation/abs_regret_mean: 4.0957
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 2.6555
+validation/sym_rel_regret_mean: 0.3135
+train/objective_mean: 5.7518
+train/loss_mean: 9.4416
+train/sym_rel_regret_mean: 0.2848
+validation/mse_mean: 4.2151
+validation/arc_costs_mean: 0.7669
+validation/rel_regret_mean: 1.1020
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 5.2495
+train/solver_calls_mean: 596.1667
+train/rel_regret_mean: 1.0541
+validation/objective_mean: 7.7591
+validation/abs_regret_mean: 3.8735
+Validation evaluation (abs_regret): 2.762871265411377
+New best validation evaluation (abs_regret): 2.762871265411377 (was 3.012985944747925)
+Training finished. Evaluating on the test set...
+Problem mode set to: test
+Epoch Results:
+validation/sym_rel_regret_mean: 0.3135
+train/loss_mean: 9.4416
+test/mse_mean: 2.2066
+test/objective_mean: 5.3978
+test/sym_rel_regret_mean: 0.2255
+validation/abs_regret_mean: 3.8735
+validation/select_arc_mean: 0.2000
+test/arc_costs_mean: 0.7694
+validation/mse_mean: 4.2151
+test/rel_regret_mean: 0.7104
+train/solver_calls_mean: 596.1667
+train/abs_regret_mean: 2.6555
+train/sym_rel_regret_mean: 0.2848
+train/objective_mean: 5.7518
+test/select_arc_mean: 0.2000
+validation/arc_costs_mean: 0.7669
+validation/rel_regret_mean: 1.1020
+train/grad_norm_mean: 5.2495
+train/rel_regret_mean: 1.0541
+validation/objective_mean: 7.7591
+test/abs_regret_mean: 2.4624
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[23]:
+</code></pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+np.float32(2.7628713)
+</pre></div></div>
+</div>
+<p>To set up a more extended set of experiments, one can use the base config and update only parts of the config by using <code class="docutils literal notranslate"><span class="pre">update_config</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span><code>[25]:
+</code></pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">src.utils.experiments</span><span class="w"> </span><span class="kn">import</span> <span class="n">update_config</span>
+
+<span class="n">experiment_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;SPO+&quot;</span><span class="p">:</span> <span class="p">{},</span>
+    <span class="s2">&quot;PFYL&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;decision_maker&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;loss_function_str&quot;</span><span class="p">:</span> <span class="s2">&quot;perturbedFenchelYoung&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;PFL&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;decision_maker&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;loss_function_str&quot;</span><span class="p">:</span> <span class="s2">&quot;mse&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="n">seeds</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">experiment_name</span><span class="p">,</span> <span class="n">kwargs</span> <span class="ow">in</span> <span class="n">experiment_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">seed</span> <span class="ow">in</span> <span class="n">seeds</span><span class="p">:</span>
+        <span class="n">yaml_dir</span> <span class="o">=</span> <span class="s2">&quot;configs/shortest_path.yml&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">yaml_dir</span><span class="p">))</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;runner&quot;</span><span class="p">][</span><span class="s2">&quot;experiment_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">experiment_name</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;seed&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                <span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">seed</span>
+        <span class="n">updated_config</span> <span class="o">=</span> <span class="n">update_config</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">run</span><span class="p">(</span><span class="n">updated_config</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Set parameter FeasibilityTol to value 1e-06
+Generating data using shortest_path
+Computing optimal decisions for the entire dataset...
+Optimal decisions computed and added to dataset.
+Computing optimal objectives for the entire dataset...
+Optimal objectives computed and added to dataset.
+Shuffling indices before splitting...
+Dataset split completed: Train=187, Validation=37, Test=26
+Problem mode set to: train
+Problem mode set to: train
+Num of cores: 1
+Epoch 0/5: Starting initial validation...
+Problem mode set to: validation
+Epoch Results:
+validation/sym_rel_regret_mean: 0.3020
+validation/mse_mean: 2.3372
+validation/arc_costs_mean: 0.8379
+validation/rel_regret_mean: 1.0252
+validation/select_arc_mean: 0.2000
+validation/objective_mean: 7.9080
+validation/abs_regret_mean: 3.9899
+Initial best validation metric (abs_regret): 3.9898881912231445
+Starting training...
+Epoch: 1/5
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 2.6908
+validation/sym_rel_regret_mean: 0.3020
+train/objective_mean: 5.8365
+train/loss_mean: 10.7902
+train/sym_rel_regret_mean: 0.2926
+validation/mse_mean: 2.3372
+validation/arc_costs_mean: 0.8379
+validation/rel_regret_mean: 1.0252
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 6.5378
+train/solver_calls_mean: 148.1667
+train/rel_regret_mean: 1.1095
+validation/objective_mean: 7.9080
+validation/abs_regret_mean: 3.9899
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 2.6908
+validation/sym_rel_regret_mean: 0.2846
+train/objective_mean: 5.8365
+train/loss_mean: 10.7902
+train/sym_rel_regret_mean: 0.2926
+validation/mse_mean: 2.2947
+validation/arc_costs_mean: 0.8393
+validation/rel_regret_mean: 0.9382
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 6.5378
+train/solver_calls_mean: 148.1667
+train/rel_regret_mean: 1.1095
+validation/objective_mean: 7.4548
+validation/abs_regret_mean: 3.5367
+Validation evaluation (abs_regret): 3.083587646484375
+New best validation evaluation (abs_regret): 3.083587646484375 (was 3.9898881912231445)
+Epoch: 2/5
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 2.4608
+validation/sym_rel_regret_mean: 0.2846
+train/objective_mean: 5.6046
+train/loss_mean: 10.0271
+train/sym_rel_regret_mean: 0.2804
+validation/mse_mean: 2.2947
+validation/arc_costs_mean: 0.8393
+validation/rel_regret_mean: 0.9382
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 6.3082
+train/solver_calls_mean: 260.1667
+train/rel_regret_mean: 1.0375
+validation/objective_mean: 7.4548
+validation/abs_regret_mean: 3.5367
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 2.4608
+validation/sym_rel_regret_mean: 0.2673
+train/objective_mean: 5.6046
+train/loss_mean: 10.0271
+train/sym_rel_regret_mean: 0.2804
+validation/mse_mean: 2.2573
+validation/arc_costs_mean: 0.8408
+validation/rel_regret_mean: 0.8581
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 6.3082
+train/solver_calls_mean: 260.1667
+train/rel_regret_mean: 1.0375
+validation/objective_mean: 7.1215
+validation/abs_regret_mean: 3.2034
+Validation evaluation (abs_regret): 2.5368452072143555
+New best validation evaluation (abs_regret): 2.5368452072143555 (was 3.083587646484375)
+Epoch: 3/5
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 2.3045
+validation/sym_rel_regret_mean: 0.2673
+train/objective_mean: 5.4559
+train/loss_mean: 9.3657
+train/sym_rel_regret_mean: 0.2713
+validation/mse_mean: 2.2573
+validation/arc_costs_mean: 0.8408
+validation/rel_regret_mean: 0.8581
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 6.1346
+train/solver_calls_mean: 372.1667
+train/rel_regret_mean: 0.9930
+validation/objective_mean: 7.1215
+validation/abs_regret_mean: 3.2034
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 2.3045
+validation/sym_rel_regret_mean: 0.2508
+train/objective_mean: 5.4559
+train/loss_mean: 9.3657
+train/sym_rel_regret_mean: 0.2713
+validation/mse_mean: 2.2236
+validation/arc_costs_mean: 0.8423
+validation/rel_regret_mean: 0.7941
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 6.1346
+train/solver_calls_mean: 372.1667
+train/rel_regret_mean: 0.9930
+validation/objective_mean: 6.8839
+validation/abs_regret_mean: 2.9658
+Validation evaluation (abs_regret): 2.252972364425659
+New best validation evaluation (abs_regret): 2.252972364425659 (was 2.5368452072143555)
+Epoch: 4/5
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 2.1268
+validation/sym_rel_regret_mean: 0.2508
+train/objective_mean: 5.2749
+train/loss_mean: 8.7415
+train/sym_rel_regret_mean: 0.2566
+validation/mse_mean: 2.2236
+validation/arc_costs_mean: 0.8423
+validation/rel_regret_mean: 0.7941
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 5.9854
+train/solver_calls_mean: 484.1667
+train/rel_regret_mean: 0.9239
+validation/objective_mean: 6.8839
+validation/abs_regret_mean: 2.9658
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 2.1268
+validation/sym_rel_regret_mean: 0.2337
+train/objective_mean: 5.2749
+train/loss_mean: 8.7415
+train/sym_rel_regret_mean: 0.2566
+validation/mse_mean: 2.1929
+validation/arc_costs_mean: 0.8439
+validation/rel_regret_mean: 0.7230
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 5.9854
+train/solver_calls_mean: 484.1667
+train/rel_regret_mean: 0.9239
+validation/objective_mean: 6.6688
+validation/abs_regret_mean: 2.7507
+Validation evaluation (abs_regret): 1.8901211023330688
+New best validation evaluation (abs_regret): 1.8901211023330688 (was 2.252972364425659)
+Epoch: 5/5
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 1.9731
+validation/sym_rel_regret_mean: 0.2337
+train/objective_mean: 5.1195
+train/loss_mean: 8.1695
+train/sym_rel_regret_mean: 0.2404
+validation/mse_mean: 2.1929
+validation/arc_costs_mean: 0.8439
+validation/rel_regret_mean: 0.7230
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 5.8061
+train/solver_calls_mean: 596.1667
+train/rel_regret_mean: 0.8545
+validation/objective_mean: 6.6688
+validation/abs_regret_mean: 2.7507
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 1.9731
+validation/sym_rel_regret_mean: 0.2175
+train/objective_mean: 5.1195
+train/loss_mean: 8.1695
+train/sym_rel_regret_mean: 0.2404
+validation/mse_mean: 2.1650
+validation/arc_costs_mean: 0.8455
+validation/rel_regret_mean: 0.6596
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 5.8061
+train/solver_calls_mean: 596.1667
+train/rel_regret_mean: 0.8545
+validation/objective_mean: 6.4554
+validation/abs_regret_mean: 2.5374
+Validation evaluation (abs_regret): 1.4707140922546387
+New best validation evaluation (abs_regret): 1.4707140922546387 (was 1.8901211023330688)
+Training finished. Evaluating on the test set...
+Problem mode set to: test
+Epoch Results:
+validation/sym_rel_regret_mean: 0.2175
+train/loss_mean: 8.1695
+test/mse_mean: 1.8271
+test/objective_mean: 3.7426
+test/sym_rel_regret_mean: 0.1794
+validation/abs_regret_mean: 2.5374
+validation/select_arc_mean: 0.2000
+test/arc_costs_mean: 0.9246
+validation/mse_mean: 2.1650
+test/rel_regret_mean: 0.5429
+train/solver_calls_mean: 596.1667
+train/abs_regret_mean: 1.9731
+train/sym_rel_regret_mean: 0.2404
+train/objective_mean: 5.1195
+test/select_arc_mean: 0.2000
+validation/arc_costs_mean: 0.8455
+validation/rel_regret_mean: 0.6596
+train/grad_norm_mean: 5.8061
+train/rel_regret_mean: 0.8545
+validation/objective_mean: 6.4554
+test/abs_regret_mean: 0.8020
+Set parameter FeasibilityTol to value 1e-06
+Generating data using shortest_path
+Computing optimal decisions for the entire dataset...
+Optimal decisions computed and added to dataset.
+Computing optimal objectives for the entire dataset...
+Optimal objectives computed and added to dataset.
+Shuffling indices before splitting...
+Dataset split completed: Train=187, Validation=37, Test=26
+Problem mode set to: train
+Problem mode set to: train
+Num of cores: 1
+Epoch 0/5: Starting initial validation...
+Problem mode set to: validation
+Epoch Results:
+validation/sym_rel_regret_mean: 0.3020
+validation/mse_mean: 2.3372
+validation/arc_costs_mean: 0.8379
+validation/rel_regret_mean: 1.0252
+validation/select_arc_mean: 0.2000
+validation/objective_mean: 7.9080
+validation/abs_regret_mean: 3.9899
+Initial best validation metric (abs_regret): 3.9898881912231445
+Starting training...
+Epoch: 1/5
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 2.8377
+validation/sym_rel_regret_mean: 0.3020
+train/objective_mean: 5.9835
+train/loss_mean: 6.8692
+train/sym_rel_regret_mean: 0.2979
+validation/mse_mean: 2.3372
+validation/arc_costs_mean: 0.8379
+validation/rel_regret_mean: 1.0252
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 2.2794
+train/solver_calls_mean: 148.1667
+train/rel_regret_mean: 1.1443
+validation/objective_mean: 7.9080
+validation/abs_regret_mean: 3.9899
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 2.8377
+validation/sym_rel_regret_mean: 0.2924
+train/objective_mean: 5.9835
+train/loss_mean: 6.8692
+train/sym_rel_regret_mean: 0.2979
+validation/mse_mean: 2.2990
+validation/arc_costs_mean: 0.8396
+validation/rel_regret_mean: 0.9810
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 2.2794
+train/solver_calls_mean: 148.1667
+train/rel_regret_mean: 1.1443
+validation/objective_mean: 7.7732
+validation/abs_regret_mean: 3.8552
+Validation evaluation (abs_regret): 3.7204201221466064
+New best validation evaluation (abs_regret): 3.7204201221466064 (was 3.9898881912231445)
+Epoch: 2/5
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 2.6506
+validation/sym_rel_regret_mean: 0.2924
+train/objective_mean: 5.7944
+train/loss_mean: 6.6645
+train/sym_rel_regret_mean: 0.2897
+validation/mse_mean: 2.2990
+validation/arc_costs_mean: 0.8396
+validation/rel_regret_mean: 0.9810
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 2.2079
+train/solver_calls_mean: 260.1667
+train/rel_regret_mean: 1.0915
+validation/objective_mean: 7.7732
+validation/abs_regret_mean: 3.8552
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 2.6506
+validation/sym_rel_regret_mean: 0.2736
+train/objective_mean: 5.7944
+train/loss_mean: 6.6645
+train/sym_rel_regret_mean: 0.2897
+validation/mse_mean: 2.2640
+validation/arc_costs_mean: 0.8412
+validation/rel_regret_mean: 0.8980
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 2.2079
+train/solver_calls_mean: 260.1667
+train/rel_regret_mean: 1.0915
+validation/objective_mean: 7.3671
+validation/abs_regret_mean: 3.4490
+Validation evaluation (abs_regret): 2.6368212699890137
+New best validation evaluation (abs_regret): 2.6368212699890137 (was 3.7204201221466064)
+Epoch: 3/5
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 2.4822
+validation/sym_rel_regret_mean: 0.2736
+train/objective_mean: 5.6335
+train/loss_mean: 6.5385
+train/sym_rel_regret_mean: 0.2798
+validation/mse_mean: 2.2640
+validation/arc_costs_mean: 0.8412
+validation/rel_regret_mean: 0.8980
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 2.1539
+train/solver_calls_mean: 372.1667
+train/rel_regret_mean: 1.0401
+validation/objective_mean: 7.3671
+validation/abs_regret_mean: 3.4490
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 2.4822
+validation/sym_rel_regret_mean: 0.2560
+train/objective_mean: 5.6335
+train/loss_mean: 6.5385
+train/sym_rel_regret_mean: 0.2798
+validation/mse_mean: 2.2318
+validation/arc_costs_mean: 0.8427
+validation/rel_regret_mean: 0.8291
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 2.1539
+train/solver_calls_mean: 372.1667
+train/rel_regret_mean: 1.0401
+validation/objective_mean: 7.0815
+validation/abs_regret_mean: 3.1635
+Validation evaluation (abs_regret): 2.3066790103912354
+New best validation evaluation (abs_regret): 2.3066790103912354 (was 2.6368212699890137)
+Epoch: 4/5
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 2.3052
+validation/sym_rel_regret_mean: 0.2560
+train/objective_mean: 5.4533
+train/loss_mean: 6.3538
+train/sym_rel_regret_mean: 0.2692
+validation/mse_mean: 2.2318
+validation/arc_costs_mean: 0.8427
+validation/rel_regret_mean: 0.8291
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 2.1029
+train/solver_calls_mean: 484.1667
+train/rel_regret_mean: 0.9910
+validation/objective_mean: 7.0815
+validation/abs_regret_mean: 3.1635
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 2.3052
+validation/sym_rel_regret_mean: 0.2392
+train/objective_mean: 5.4533
+train/loss_mean: 6.3538
+train/sym_rel_regret_mean: 0.2692
+validation/mse_mean: 2.2020
+validation/arc_costs_mean: 0.8442
+validation/rel_regret_mean: 0.7577
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 2.1029
+train/solver_calls_mean: 484.1667
+train/rel_regret_mean: 0.9910
+validation/objective_mean: 6.8533
+validation/abs_regret_mean: 2.9352
+Validation evaluation (abs_regret): 2.02203631401062
+New best validation evaluation (abs_regret): 2.02203631401062 (was 2.3066790103912354)
+Epoch: 5/5
+Problem mode set to: train
+Epoch Results:
+train/abs_regret_mean: 2.1462
+validation/sym_rel_regret_mean: 0.2392
+train/objective_mean: 5.2927
+train/loss_mean: 6.1865
+train/sym_rel_regret_mean: 0.2555
+validation/mse_mean: 2.2020
+validation/arc_costs_mean: 0.8442
+validation/rel_regret_mean: 0.7577
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 2.0330
+train/solver_calls_mean: 596.1667
+train/rel_regret_mean: 0.9298
+validation/objective_mean: 6.8533
+validation/abs_regret_mean: 2.9352
+Problem mode set to: validation
+Epoch Results:
+train/abs_regret_mean: 2.1462
+validation/sym_rel_regret_mean: 0.2234
+train/objective_mean: 5.2927
+train/loss_mean: 6.1865
+train/sym_rel_regret_mean: 0.2555
+validation/mse_mean: 2.1750
+validation/arc_costs_mean: 0.8456
+validation/rel_regret_mean: 0.6922
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 2.0330
+train/solver_calls_mean: 596.1667
+train/rel_regret_mean: 0.9298
+validation/objective_mean: 6.6156
+validation/abs_regret_mean: 2.6975
+Validation evaluation (abs_regret): 1.5090945959091187
+New best validation evaluation (abs_regret): 1.5090945959091187 (was 2.02203631401062)
+Training finished. Evaluating on the test set...
+Problem mode set to: test
+Epoch Results:
+validation/sym_rel_regret_mean: 0.2234
+train/loss_mean: 6.1865
+test/mse_mean: 1.8451
+test/objective_mean: 3.9453
+test/sym_rel_regret_mean: 0.2012
+validation/abs_regret_mean: 2.6975
+validation/select_arc_mean: 0.2000
+test/arc_costs_mean: 0.9208
+validation/mse_mean: 2.1750
+test/rel_regret_mean: 0.6255
+train/solver_calls_mean: 596.1667
+train/abs_regret_mean: 2.1462
+train/sym_rel_regret_mean: 0.2555
+train/objective_mean: 5.2927
+test/select_arc_mean: 0.2000
+validation/arc_costs_mean: 0.8456
+validation/rel_regret_mean: 0.6922
+train/grad_norm_mean: 2.0330
+train/rel_regret_mean: 0.9298
+validation/objective_mean: 6.6156
+test/abs_regret_mean: 1.0047
+Set parameter FeasibilityTol to value 1e-06
+Generating data using shortest_path
+Computing optimal decisions for the entire dataset...
+Optimal decisions computed and added to dataset.
+Computing optimal objectives for the entire dataset...
+Optimal objectives computed and added to dataset.
+Shuffling indices before splitting...
+Dataset split completed: Train=187, Validation=37, Test=26
+Problem mode set to: train
+Problem mode set to: train
+Epoch 0/5: Starting initial validation...
+Problem mode set to: validation
+Epoch Results:
+validation/sym_rel_regret_mean: 0.3020
+validation/mse_mean: 2.3372
+validation/arc_costs_mean: 0.8379
+validation/rel_regret_mean: 1.0252
+validation/select_arc_mean: 0.2000
+validation/objective_mean: 7.9080
+validation/abs_regret_mean: 3.9899
+Initial best validation metric (abs_regret): 3.9898881912231445
+Starting training...
+Epoch: 1/5
+Problem mode set to: train
+Epoch Results:
+validation/sym_rel_regret_mean: 0.3020
+train/loss_mean: 2.8444
+validation/mse_mean: 2.3372
+validation/arc_costs_mean: 0.8379
+validation/rel_regret_mean: 1.0252
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 0.9549
+train/solver_calls_mean: 37.0000
+validation/objective_mean: 7.9080
+validation/abs_regret_mean: 3.9899
+Problem mode set to: validation
+Epoch Results:
+validation/sym_rel_regret_mean: 0.2955
+train/loss_mean: 2.8444
+validation/mse_mean: 2.2571
+validation/arc_costs_mean: 0.8454
+validation/rel_regret_mean: 1.0024
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 0.9549
+train/solver_calls_mean: 37.0000
+validation/objective_mean: 7.8244
+validation/abs_regret_mean: 3.9063
+Validation evaluation (abs_regret): 3.8226499557495117
+New best validation evaluation (abs_regret): 3.8226499557495117 (was 3.9898881912231445)
+Epoch: 2/5
+Problem mode set to: train
+Epoch Results:
+validation/sym_rel_regret_mean: 0.2955
+train/loss_mean: 2.7419
+validation/mse_mean: 2.2571
+validation/arc_costs_mean: 0.8454
+validation/rel_regret_mean: 1.0024
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 0.9360
+train/solver_calls_mean: 55.5000
+validation/objective_mean: 7.8244
+validation/abs_regret_mean: 3.9063
+Problem mode set to: validation
+Epoch Results:
+validation/sym_rel_regret_mean: 0.2914
+train/loss_mean: 2.7419
+validation/mse_mean: 2.1812
+validation/arc_costs_mean: 0.8513
+validation/rel_regret_mean: 0.9837
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 0.9360
+train/solver_calls_mean: 55.5000
+validation/objective_mean: 7.7703
+validation/abs_regret_mean: 3.8522
+Validation evaluation (abs_regret): 3.7440361976623535
+New best validation evaluation (abs_regret): 3.7440361976623535 (was 3.8226499557495117)
+Epoch: 3/5
+Problem mode set to: train
+Epoch Results:
+validation/sym_rel_regret_mean: 0.2914
+train/loss_mean: 2.6594
+validation/mse_mean: 2.1812
+validation/arc_costs_mean: 0.8513
+validation/rel_regret_mean: 0.9837
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 0.9133
+train/solver_calls_mean: 74.0000
+validation/objective_mean: 7.7703
+validation/abs_regret_mean: 3.8522
+Problem mode set to: validation
+Epoch Results:
+validation/sym_rel_regret_mean: 0.2837
+train/loss_mean: 2.6594
+validation/mse_mean: 2.1092
+validation/arc_costs_mean: 0.8579
+validation/rel_regret_mean: 0.9439
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 0.9133
+train/solver_calls_mean: 74.0000
+validation/objective_mean: 7.6018
+validation/abs_regret_mean: 3.6837
+Validation evaluation (abs_regret): 3.1782002449035645
+New best validation evaluation (abs_regret): 3.1782002449035645 (was 3.7440361976623535)
+Epoch: 4/5
+Problem mode set to: train
+Epoch Results:
+validation/sym_rel_regret_mean: 0.2837
+train/loss_mean: 2.5935
+validation/mse_mean: 2.1092
+validation/arc_costs_mean: 0.8579
+validation/rel_regret_mean: 0.9439
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 0.8948
+train/solver_calls_mean: 92.5000
+validation/objective_mean: 7.6018
+validation/abs_regret_mean: 3.6837
+Problem mode set to: validation
+Epoch Results:
+validation/sym_rel_regret_mean: 0.2745
+train/loss_mean: 2.5935
+validation/mse_mean: 2.0417
+validation/arc_costs_mean: 0.8638
+validation/rel_regret_mean: 0.9040
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 0.8948
+train/solver_calls_mean: 92.5000
+validation/objective_mean: 7.3846
+validation/abs_regret_mean: 3.4665
+Validation evaluation (abs_regret): 2.59779691696167
+New best validation evaluation (abs_regret): 2.59779691696167 (was 3.1782002449035645)
+Epoch: 5/5
+Problem mode set to: train
+Epoch Results:
+validation/sym_rel_regret_mean: 0.2745
+train/loss_mean: 2.5165
+validation/mse_mean: 2.0417
+validation/arc_costs_mean: 0.8638
+validation/rel_regret_mean: 0.9040
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 0.8880
+train/solver_calls_mean: 111.0000
+validation/objective_mean: 7.3846
+validation/abs_regret_mean: 3.4665
+Problem mode set to: validation
+Epoch Results:
+validation/sym_rel_regret_mean: 0.2673
+train/loss_mean: 2.5165
+validation/mse_mean: 1.9777
+validation/arc_costs_mean: 0.8700
+validation/rel_regret_mean: 0.8707
+validation/select_arc_mean: 0.2000
+train/grad_norm_mean: 0.8880
+train/solver_calls_mean: 111.0000
+validation/objective_mean: 7.1984
+validation/abs_regret_mean: 3.2803
+Validation evaluation (abs_regret): 2.3491334915161133
+New best validation evaluation (abs_regret): 2.3491334915161133 (was 2.59779691696167)
+Training finished. Evaluating on the test set...
+Problem mode set to: test
+Epoch Results:
+test/arc_costs_mean: 0.8639
+validation/sym_rel_regret_mean: 0.2673
+train/loss_mean: 2.5165
+test/mse_mean: 1.3423
+validation/mse_mean: 1.9777
+test/sym_rel_regret_mean: 0.3036
+test/select_arc_mean: 0.2000
+validation/arc_costs_mean: 0.8700
+validation/rel_regret_mean: 0.8707
+validation/select_arc_mean: 0.2000
+test/objective_mean: 4.9862
+test/rel_regret_mean: 1.1638
+train/grad_norm_mean: 0.8880
+train/solver_calls_mean: 111.0000
+test/abs_regret_mean: 2.0456
+validation/objective_mean: 7.1984
+validation/abs_regret_mean: 3.2803
+</pre></div></div>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  
+  
+  <div class="md-footer-meta md-typeset">
+    
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-footer-copyright__highlight">
+        &#169; Copyright 2025 - 2025, Noah Schutte, Kim van den Houten, Grigorii Veviurko.
+        
+    </div>
+  
+    Created using
+    <a href="https://www.sphinx-doc.org/" target="_blank" rel="noopener">Sphinx</a>
+    8.1.3.
+     and
+    <a href="https://github.com/jbms/sphinx-immaterial/" target="_blank" rel="noopener">Sphinx-Immaterial</a>
+  
+</div>
+      
+    </div>
+    
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.expand", "navigation.top"], "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+        <script src="../_static/sphinx_immaterial_theme.32136f45f91ae6956.min.js?v=a7a9472a"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script id="MathJax-script" src="../_static/mathjax/tex-mml-chtml.js?v=cadf963e"></script>
+    
+  </body>
+</html>
