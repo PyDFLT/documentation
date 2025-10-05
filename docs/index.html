@@ -12,7 +12,7 @@
       
       
       
-        <link rel="next" href="examples/1%20The%20structure%20of%20PyDFLT.html">
+        <link rel="next" href="examples/1%20Solving%20a%20contextual%20knapsack%20problem.html">
       
       
       <link rel="icon" href="">
@@ -277,12 +277,12 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/1%20The%20structure%20of%20PyDFLT.html" class="md-nav__link">
+      <a href="examples/1%20Solving%20a%20contextual%20knapsack%20problem.html" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    <span title="/examples/1 the structure of pydflt.ipynb (reference label)"><span>1 The structure of Py<wbr>DFLT</span></span>
+    <span title="/examples/1 solving a contextual knapsack problem.ipynb (reference label)"><span>1 Solving a contextual knapsack problem</span></span>
     
   </span>
   
@@ -500,12 +500,13 @@
 
 <img alt="PyDFLT logo (light)" class="hero-logo hero-logo-light" src="_images/logo.png" />
 <img alt="PyDFLT logo (dark)" class="hero-logo hero-logo-dark" src="_images/logo_dark.png" />
-<p><strong>PyDFLT</strong> is designed to help researchers apply and develop Decision Focused Learning (DFL) tools in Python.</p>
+<p><strong>PyDFLT</strong> is designed to help researchers apply and develop Decision Focused Learning (DFL) tools in Python. It uses <strong>CVXPYLayers</strong> [1] for differentiable models, <strong>PyEPO</strong> [2] for models with a linear objective and has an implementation of <strong>SFGE</strong> [3] and <strong>Lancer</strong> [4]. To help with research, it supports Weights &amp; Biases (<a class="reference external" href="https://wandb.ai/">https://wandb.ai/</a>) and Optuna (<a class="reference external" href="https://optuna.org">https://optuna.org</a>).</p>
+<p>DFL aims at learning a predictive model that maximizes the decision quality of a downstream decision-making task or optimization model. This problem as a whole is named a predict &amp; optimize or contextual optimization problem. In this setting, the optimization model has some uncertain parameters that correlate with some context or features. If seen as a pure predictive problem, one could aim to maximize predictive accuracy. However, since we know we will use the predictions to make decisions, we aim at maximizing decision quality.</p>
 <h1 id="contents">Contents<a class="headerlink" href="#contents" title="Link to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="examples/1%20The%20structure%20of%20PyDFLT.html">1 The structure of PyDFLT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/1%20Solving%20a%20contextual%20knapsack%20problem.html">1 Solving a contextual knapsack problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/2%20Running%20experiments%20using%20registries.html">2 Running experiments using registries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/3%20Analyzing%20training%20using%20Weights%20and%20Biases.html">3 Analyzing training using Weights and Biases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/4%20Hyperparameter%20tuning%20using%20Optuna.html">4 Hyperparamater tuning using Optuna</a></li>
@@ -518,6 +519,11 @@
 <li class="toctree-l1"><a class="reference internal" href="api/src.html">PyDFLT</a></li>
 </ul>
 </div>
+<p>References:</p>
+<p>[1] Akshay Agrawal, Brandon Amos, Shane Barratt, Stephen Boyd, Steven Diamond, and J Zico Kolter. Differentiable convex optimization layers. Advances in neural information processing systems, 32, 2019. doi:10.48550/arXiv.1910.12430.</p>
+<p>[2] Bo Tang and Elias B. Khalil. Pyepo: a pytorch-based end-to-end predict-then-optimize library for linear and integer programming. Mathematical Programming Computation, 16(3):297–335, 2024. doi:10.1007/s12532-024-00255-x.</p>
+<p>[3] Mattia Silvestri, Senne Berden, Jayanta Mandi, Ali ˙Irfan Mahmuto˘gulları, Maxime Mulamba, Allegra De Filippo, Tias Guns, and Michele Lombardi. Score function gradient estimation to widen the applicability of decision-focused learning. CoRR, abs/2307.05213, 2023. doi:10.48550/arXiv.2307.05213.</p>
+<p>[4] Arman Zharmagambetov, Brandon Amos, Aaron Ferber, Taoan Huang, Bistra Dilkina, and Yuandong Tian. Landscape surrogate: Learning decision losses for mathematical optimization under partial information. Advances in Neural Information Processing Systems, 36:27332–27350, 2023. doi:10.48550/arXiv.2307.08964.</p>
 
 
 
